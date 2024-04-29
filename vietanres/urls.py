@@ -24,4 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # main
     path('', include('restaurant.urls')),    
-] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+]
+
+if settings.ENV == "Local":
+    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
