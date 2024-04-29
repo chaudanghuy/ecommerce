@@ -18,6 +18,7 @@ load_dotenv()
 
 # Environment variables
 DATABASE_TYPE = os.getenv("DATABASE_TYPE")
+ENV = os.getenv("ENV")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
