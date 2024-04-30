@@ -1,0 +1,44 @@
+/* Tùy chỉnh CSS */
+.table-card {
+    margin: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.table-card.reserved {
+    background-color: #ffc107;
+    /* Màu nền màu vàng cho bàn đã đặt */
+}
+
+.corner {
+    margin-top: 22px;
+}
+
+.corner-box {    
+    background-color: black;
+    color: whitesmoke;
+    border: 2px solid rgb(118, 122, 94);
+    padding: 22px;
+    border-radius: 5px;
+    margin-left: 20px;
+    margin-right: 5px;
+    width: 75px;
+    height: 75px;
+    text-align: center;    
+}
+
+.corner-box.choose {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.corner-box.booked {
+    background-color: grey;
+    color: #ccc;
+}
+
+.date-header {
+    text-align: center;
+    margin-left: 5px;
+    margin-right: 10px;
+}

@@ -1,0 +1,700 @@
+{% extends './base.html' %}
+
+{% load static %}
+
+{% block title %}Viet An Restaurant{% endblock %}
+
+{% block content %}
+<!-- ======= Hero Section ======= -->
+<section id="hero" class="d-flex align-items-center">
+  <div class="container position-relative text-center text-lg-start" data-aos="zoom-in" data-aos-delay="100">
+    <div class="row">
+      <div class="col-lg-8">
+        <h1>Welcome to <span>Viet An</span></h1>
+        <h2>Flavors of the East, Served with Passion</h2>
+
+        <div class="btns">
+          <a href="#menu" class="btn-menu animated fadeInUp scrollto">Our Menu</a>
+          <a href={% url 'book' %} class="btn-book animated fadeInUp scrollto">Book a Table</a>
+        </div>
+      </div>
+      <div class="col-lg-4 d-flex align-items-center justify-content-center position-relative" data-aos="zoom-in"
+        data-aos-delay="200">
+        <a href="https://www.youtube.com/watch?v=GlrxcuEDyF8" class="glightbox play-btn"></a>
+      </div>
+
+    </div>
+  </div>
+</section><!-- End Hero -->
+
+<main id="main">
+
+  <!-- ======= About Section ======= -->
+  <section id="about" class="about">
+    <div class="container" data-aos="fade-up">
+
+      <div class="row">
+        <div class="col-lg-6 order-1 order-lg-2" data-aos="zoom-in" data-aos-delay="100">
+          <div class="about-img">
+            <img src="{% static '/demo1/assets/img/home/restaurant-enhanced.jpg' %}" alt="">
+          </div>
+        </div>
+        <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
+          <h3>Immerse yourself in a culinary journey through the vibrant flavors of Asia, where every dish is crafted
+            with care to tantalize your taste buds.</h3>
+          <p class="fst-italic">
+            From the delicate balance of aromatic spices to the rich textures of traditional ingredients, our Asian
+            restaurant invites you to experience the essence of indulgence
+          </p>
+          <ul>
+            <li><i class="bi bi-check-circle"></i> Each bite is a symphony of flavors, elevating your dining
+              experience to new heights</li>
+            <li><i class="bi bi-check-circle"></i> Discover the artistry and passion behind our dishes as we present
+              you with a feast for the senses. .</li>
+            <li><i class="bi bi-check-circle"></i> Let our menu be your passport to a world of culinary delights,
+              where the familiar and the exotic intertwine to create unforgettable dining experiences.</li>
+          </ul>
+          <p>
+            Come, savor the delights of Asia with us and embark on a gastronomic adventure like no other.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section><!-- End About Section -->
+
+  <!-- ======= Why Us Section ======= -->
+  <section id="why-us" class="why-us">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Why Us</h2>
+        <p>Why Choose Our Restaurant</p>
+      </div>
+
+      <div class="row">
+
+        <div class="col-lg-4">
+          <div class="box" data-aos="zoom-in" data-aos-delay="100">
+            <span>01</span>
+            <h4>Authenticity</h4>
+            <p>We take pride in serving authentic Asian cuisine, prepared by skilled chefs who have mastered the art
+              of traditional cooking techniques.</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4 mt-4 mt-lg-0">
+          <div class="box" data-aos="zoom-in" data-aos-delay="200">
+            <span>02</span>
+            <h4>Variety</h4>
+            <p>Our extensive menu features a wide range of dishes from across Asia, ensuring there's something for
+              everyone to enjoy. </p>
+          </div>
+        </div>
+
+        <div class="col-lg-4 mt-4 mt-lg-0">
+          <div class="box" data-aos="zoom-in" data-aos-delay="300">
+            <span>03</span>
+            <h4> Quality</h4>
+            <p>Quality is at the heart of everything we do. We source the finest ingredients, hand-selecting each item
+              to ensure freshness and flavor. </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section><!-- End Why Us Section -->
+
+  <!-- ======= Menu Section ======= -->
+  <section id="menu" class="menu section-bg">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Menu</h2>
+        <p>Check Our Tasty Menu</p>
+      </div>
+
+      <div class="row" data-aos="fade-up" data-aos-delay="100">
+        <div class="col-lg-12 d-flex justify-content-center">
+          <ul id="menu-flters">
+            <li data-filter="*" class="filter-active">All</li>
+            <li data-filter=".filter-small-bites">Small Bites</li>
+            <li data-filter=".filter-mains">Mains</li>
+            <li data-filter=".filter-desserts">Desserts</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row menu-container" data-aos="fade-up" data-aos-delay="200">
+        {% for food in foods %}
+        <div class="col-lg-6 menu-item {{food.category.filter_code}}">
+          <img src="{{food.image.url}}" class="menu-img" alt="">
+          <div class="menu-content">
+            <a href="#">{{food.name}}</a><span>{{food.price}}</span>
+          </div>
+          <div class="menu-ingredients">
+            {{food.description}}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </section><!-- End Menu Section -->
+
+  <!-- ======= Specials Section ======= -->
+  <section id="specials" class="specials">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Specials of the Day</h2>
+        <p>🌟 Vietnamese Delights 🌟</p>
+      </div>
+
+      <div class="row" data-aos="fade-up" data-aos-delay="100">
+        <div class="col-lg-3">
+          <ul class="nav nav-tabs flex-column">
+            <li class="nav-item">
+              <a class="nav-link active show" data-bs-toggle="tab" href="#tab-1">Starter</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#tab-2">Main Course</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#tab-3">Vegetarian Option</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#tab-4">Dessert</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#tab-5">Specialty Beverage</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-lg-9 mt-4 mt-lg-0">
+          <div class="tab-content">
+            <div class="tab-pane active show" id="tab-1">
+              <div class="row">
+                <div class="col-lg-8 details order-2 order-lg-1">
+                  <h3>🍲 Pho Ga </h3>
+                  <p class="fst-italic">Fragrant chicken broth infused with spices, served with tender rice noodles,
+                    sliced chicken breast, fresh herbs, bean sprouts, and a squeeze of lime.</p>
+                  <p>Indulge in our Happy Hour specials from 5 PM to 7 PM, featuring discounted Vietnamese-inspired
+                    cocktails and appetizers.</p>
+                </div>
+                <div class="col-lg-4 text-center order-1 order-lg-2">
+                  <img src="{% static '/demo1/assets/img/special/phoga.jpg' %}" alt="" class="img-fluid">
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-2">
+              <div class="row">
+                <div class="col-lg-8 details order-2 order-lg-1">
+                  <h3>🍜 Bun Cha Hanoi</h3>
+                  <p class="fst-italic">Grilled pork patties marinated in lemongrass and fish sauce, served with
+                    vermicelli noodles, a medley of fresh herbs, pickled vegetables, and a side of dipping sauce.</p>
+                  <p>Indulge in our Happy Hour specials from 5 PM to 7 PM, featuring discounted Vietnamese-inspired
+                    cocktails and appetizers.</p>
+                </div>
+                <div class="col-lg-4 text-center order-1 order-lg-2">
+                  <img src="{% static '/demo1/assets/img/special/bunchahanoi.jpg' %}" alt="" class="img-fluid">
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-3">
+              <div class="row">
+                <div class="col-lg-8 details order-2 order-lg-1">
+                  <h3>🥗 Goi Cuon</h3>
+                  <p class="fst-italic">Fresh spring rolls filled with tofu, rice vermicelli, crisp lettuce, aromatic
+                    herbs, and served with a tangy peanut dipping sauce</p>
+                  <p>Indulge in our Happy Hour specials from 5 PM to 7 PM, featuring discounted Vietnamese-inspired
+                    cocktails and appetizers.</p>
+                </div>
+                <div class="col-lg-4 text-center order-1 order-lg-2">
+                  <img src="{% static '/demo1/assets/img/special/goicuon.png' %}" alt="" class="img-fluid">
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-4">
+              <div class="row">
+                <div class="col-lg-8 details order-2 order-lg-1">
+                  <h3>🍨 Che Ba Mau</h3>
+                  <p class="fst-italic">A delightful trio of layered dessert featuring sweet beans, coconut milk,
+                    pandan jelly, and topped with crushed ice</p>
+                  <p>Indulge in our Happy Hour specials from 5 PM to 7 PM, featuring discounted Vietnamese-inspired
+                    cocktails and appetizers.</p>
+                </div>
+                <div class="col-lg-4 text-center order-1 order-lg-2">
+                  <img src="{% static '/demo1/assets/img/special/chebamau.png' %}" alt="" class="img-fluid">
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-5">
+              <div class="row">
+                <div class="col-lg-8 details order-2 order-lg-1">
+                  <h3>🍹 Ca Phe Sua Da</h3>
+                  <p class="fst-italic">Traditional Vietnamese iced coffee made with strong, dark-roasted coffee
+                    dripped over condensed milk and served over ice.</p>
+                  <p>Indulge in our Happy Hour specials from 5 PM to 7 PM, featuring discounted Vietnamese-inspired
+                    cocktails and appetizers.</p>
+                </div>
+                <div class="col-lg-4 text-center order-1 order-lg-2">
+                  <img src="{% static '/demo1/assets/img/special/cafesuada.jpg' %}" alt="" class="img-fluid">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section><!-- End Specials Section -->
+
+  <!-- ======= Events Section ======= -->
+  <!-- <section id="events" class="events">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Events</h2>
+        <p>Organize Your Events in our Restaurant</p>
+      </div>
+
+      <div class="events-slider swiper-container" data-aos="fade-up" data-aos-delay="100">
+        <div class="swiper-wrapper">
+
+          <div class="swiper-slide">
+            <div class="row event-item">
+              <div class="col-lg-6">
+                <img src="assets/img/event-birthday.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="col-lg-6 pt-4 pt-lg-0 content">
+                <h3>Birthday Parties</h3>
+                <div class="price">
+                  <p><span>$189</span></p>
+                </div>
+                <p class="fst-italic">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                  magna aliqua.
+                </p>
+                <ul>
+                  <li><i class="bi bi-check-circled"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+                  <li><i class="bi bi-check-circled"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
+                  <li><i class="bi bi-check-circled"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+                </ul>
+                <p>
+                  Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                  velit esse cillum dolore eu fugiat nulla pariatur
+                </p>
+              </div>
+            </div>
+          </div><!-- End testimonial item -->
+
+  <div class="swiper-slide">
+    <div class="row event-item">
+      <div class="col-lg-6">
+        <img src="{% static '/demo1/assets/img/special/special.jpg' %}" class="img-fluid" alt="" width="1024px"
+          height="767px">
+      </div>
+      <div class="col-lg-6 pt-4 pt-lg-0 content">
+        <h3>🎉 Private Party Experience: Vietnamese Culinary Journey 🎉</h3>
+        <div class="price">
+          <p><span>290</span></p>
+        </div>
+        <p class="fst-italic">
+          🥂 Upon arrival, guests are greeted with a signature Vietnamese-inspired cocktail, such as the refreshing
+          Lemongrass Mojito or the exotic Lychee Martini.
+        </p>
+        <ul>
+          <li><i class="bi bi-check-circled"></i> 🍲 Kick off the evening with an interactive cooking demonstration
+            led by our talented chefs.</li>
+          <li><i class="bi bi-check-circled"></i> 🍽️ Indulge in a specially curated menu featuring a variety of
+            Vietnamese delights.</li>
+          <li><i class="bi bi-check-circled"></i> 🎶 Enjoy live entertainment throughout the evening.</li>
+        </ul>
+        <p>
+          This private party experience offers a unique opportunity for guests to immerse themselves in the vibrant
+          flavors and rich cultural heritage of Vietnamese cuisine while creating unforgettable memories with their
+          loved ones.
+        </p>
+      </div>
+    </div>
+  </div><!-- End testimonial item -->
+
+  <div class="swiper-slide">
+    <div class="row event-item">
+      <div class="col-lg-6">
+        <img src="{% static '/demo1/assets/img/special/custom.jpg' %}" class="img-fluid" alt="">
+      </div>
+      <div class="col-lg-6 pt-4 pt-lg-0 content">
+        <h3>🎉 Custom Party Experience: Your Celebration, Your Way! 🎉</h3>
+        <div class="price">
+          <p><span>99</span></p>
+        </div>
+        <p class="fst-italic">
+          🥂 Start the celebration with a personalized welcome cocktail crafted specially for your event.
+        </p>
+        <ul>
+          <li><i class="bi bi-check-circled"></i> 🍽️ Design a menu that perfectly suits your tastes and preferences
+          </li>
+          <li><i class="bi bi-check-circled"></i> 🎈 Transform the venue into a stunning backdrop for your celebration
+            with custom decor.</li>
+          <li><i class="bi bi-check-circled"></i> 💼 Choose from a range of customizable party packages tailored to
+            your budget and requirements.</li>
+        </ul>
+        <p>
+          📝 Let our experienced event planners handle all the details so you can relax and enjoy your special day.
+          From venue selection and logistics coordination to vendor management and on-site support, we'll take care of
+          everything.
+        </p>
+      </div>
+    </div>
+  </div><!-- End testimonial item -->
+
+  </div>
+  <div class="swiper-pagination"></div>
+  </div>
+
+  </div>
+  </section>
+  <!-- End Events Section -->
+
+  <!-- ======= Testimonials Section ======= -->
+  <section id="testimonials" class="testimonials section-bg">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Testimonials</h2>
+        <p>What they're saying about us</p>
+      </div>
+
+      <div class="testimonials-slider swiper-container" data-aos="fade-up" data-aos-delay="100">
+        <div class="swiper-wrapper">
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                Absolutely loved the personalized cooking class experience! The chef was incredibly knowledgeable and
+                patient, and I learned so much about Vietnamese cuisine. Can't wait to recreate the recipes at home.
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+              <img src="{% static '/demo1/assets/img/testimonials/testimonials-1.jpg' %}" class="testimonial-img"
+                alt="">
+              <h3>Saul Goodman</h3>
+              <h4>Ceo &amp; Founder</h4>
+            </div>
+          </div><!-- End testimonial item -->
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                Our custom party at [Restaurant Name] was a huge success! From the beautiful decor to the delicious
+                food and attentive service, everything exceeded our expectations. Thank you for helping us celebrate
+                in style.
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+              <img src="{% static '/demo1/assets/img/testimonials/testimonials-2.jpg' %}" class="testimonial-img"
+                alt="">
+              <h3>Sara Wilsson</h3>
+              <h4>Designer</h4>
+            </div>
+          </div><!-- End testimonial item -->
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                The cocktails at [Restaurant Name] are to die for! Each drink was expertly crafted with fresh
+                ingredients and unique flavors. Can't wait to come back and try more.
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+              <img src="{% static '/demo1/assets/img/testimonials/testimonials-3.jpg' %}" class="testimonial-img"
+                alt="">
+              <h3>Jena Karlis</h3>
+              <h4>Store Owner</h4>
+            </div>
+          </div><!-- End testimonial item -->
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                Attended a private dinner party at [Restaurant Name] and was blown away by the quality of the food and
+                the impeccable service. The chef's attention to detail and dedication to creating a memorable dining
+                experience were truly impressive. Highly recommend.
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+              <img src="{% static '/demo1/assets/img/testimonials/testimonials-4.jpg' %}" class="testimonial-img"
+                alt="">
+              <h3>Matt Brandon</h3>
+              <h4>Freelancer</h4>
+            </div>
+          </div><!-- End testimonial item -->
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                Had a fantastic time at the themed event hosted by [Restaurant Name]. The live entertainment was
+                top-notch, and the atmosphere was electric! Looking forward to the next event.
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+              <img src="{% static '/demo1/assets/img/testimonials/testimonials-5.jpg' %}" class="testimonial-img"
+                alt="">
+              <h3>John Larson</h3>
+              <h4>Entrepreneur</h4>
+            </div>
+          </div><!-- End testimonial item -->
+
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+
+    </div>
+  </section><!-- End Testimonials Section -->
+
+  <!-- ======= Gallery Section ======= -->
+  <!-- <section id="gallery" class="gallery">
+
+    <div class="container" data-aos="fade-up">
+      <div class="section-title">
+        <h2>Gallery</h2>
+        <p>Some photos from Our Restaurant</p>
+      </div>
+    </div>
+
+    <div class="container-fluid" data-aos="fade-up" data-aos-delay="100">
+
+      <div class="row g-0">
+
+        <div class="col-lg-3 col-md-4">
+          <div class="gallery-item">
+            <a href="assets/img/gallery/gallery-1.jpg" class="gallery-lightbox" data-gall="gallery-item">
+              <img src="assets/img/gallery/gallery-1.jpg" alt="" class="img-fluid">
+            </a>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4">
+          <div class="gallery-item">
+            <a href="assets/img/gallery/gallery-2.jpg" class="gallery-lightbox" data-gall="gallery-item">
+              <img src="assets/img/gallery/gallery-2.jpg" alt="" class="img-fluid">
+            </a>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4">
+          <div class="gallery-item">
+            <a href="assets/img/gallery/gallery-3.jpg" class="gallery-lightbox" data-gall="gallery-item">
+              <img src="assets/img/gallery/gallery-3.jpg" alt="" class="img-fluid">
+            </a>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4">
+          <div class="gallery-item">
+            <a href="assets/img/gallery/gallery-4.jpg" class="gallery-lightbox" data-gall="gallery-item">
+              <img src="assets/img/gallery/gallery-4.jpg" alt="" class="img-fluid">
+            </a>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4">
+          <div class="gallery-item">
+            <a href="assets/img/gallery/gallery-5.jpg" class="gallery-lightbox" data-gall="gallery-item">
+              <img src="assets/img/gallery/gallery-5.jpg" alt="" class="img-fluid">
+            </a>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4">
+          <div class="gallery-item">
+            <a href="assets/img/gallery/gallery-6.jpg" class="gallery-lightbox" data-gall="gallery-item">
+              <img src="assets/img/gallery/gallery-6.jpg" alt="" class="img-fluid">
+            </a>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4">
+          <div class="gallery-item">
+            <a href="assets/img/gallery/gallery-7.jpg" class="gallery-lightbox" data-gall="gallery-item">
+              <img src="assets/img/gallery/gallery-7.jpg" alt="" class="img-fluid">
+            </a>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4">
+          <div class="gallery-item">
+            <a href="assets/img/gallery/gallery-8.jpg" class="gallery-lightbox" data-gall="gallery-item">
+              <img src="assets/img/gallery/gallery-8.jpg" alt="" class="img-fluid">
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section> -->
+  <!-- End Gallery Section -->
+
+  <!-- ======= Chefs Section ======= -->
+  <!-- <section id="chefs" class="chefs">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Chefs</h2>
+        <p>Our Proffesional Chefs</p>
+      </div>
+
+      <div class="row">
+
+        <div class="col-lg-4 col-md-6">
+          <div class="member" data-aos="zoom-in" data-aos-delay="100">
+            <img src="assets/img/chefs/chefs-1.jpg" class="img-fluid" alt="">
+            <div class="member-info">
+              <div class="member-info-content">
+                <h4>Walter White</h4>
+                <span>Master Chef</span>
+              </div>
+              <div class="social">
+                <a href=""><i class="bi bi-twitter"></i></a>
+                <a href=""><i class="bi bi-facebook"></i></a>
+                <a href=""><i class="bi bi-instagram"></i></a>
+                <a href=""><i class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="member" data-aos="zoom-in" data-aos-delay="200">
+            <img src="assets/img/chefs/chefs-2.jpg" class="img-fluid" alt="">
+            <div class="member-info">
+              <div class="member-info-content">
+                <h4>Sarah Jhonson</h4>
+                <span>Patissier</span>
+              </div>
+              <div class="social">
+                <a href=""><i class="bi bi-twitter"></i></a>
+                <a href=""><i class="bi bi-facebook"></i></a>
+                <a href=""><i class="bi bi-instagram"></i></a>
+                <a href=""><i class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="member" data-aos="zoom-in" data-aos-delay="300">
+            <img src="assets/img/chefs/chefs-3.jpg" class="img-fluid" alt="">
+            <div class="member-info">
+              <div class="member-info-content">
+                <h4>William Anderson</h4>
+                <span>Cook</span>
+              </div>
+              <div class="social">
+                <a href=""><i class="bi bi-twitter"></i></a>
+                <a href=""><i class="bi bi-facebook"></i></a>
+                <a href=""><i class="bi bi-instagram"></i></a>
+                <a href=""><i class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section> -->
+  <!-- End Chefs Section -->
+
+  <!-- ======= Contact Section ======= -->
+  <section id="contact" class="contact">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Contact</h2>
+        <p>Contact Us</p>
+      </div>
+    </div>
+
+    <div data-aos="fade-up">
+      <iframe style="border:0; width: 100%; height: 350px;"
+        src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=73-75%20Skene%20Street,%20Aberdeen,%20AB10%201QD+(Viet%20An%20Restaurant)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+        frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <div class="container" data-aos="fade-up">
+
+      <div class="row mt-5">
+
+        <div class="col-lg-4">
+          <div class="info">
+            <div class="address">
+              <i class="bi bi-geo-alt"></i>
+              <h4>Location:</h4>
+              <p>{{ restaurant.address }}</p>
+            </div>
+
+            <div class="open-hours">
+              <i class="bi bi-clock"></i>
+              <h4>Open Hours:</h4>
+              <p>
+                Monday-Saturday:<br>
+                {{ restaurant.opening_hours }}
+              </p>
+            </div>
+
+            <div class="email">
+              <i class="bi bi-envelope"></i>
+              <h4>Email:</h4>
+              <p>{{ restaurant.email }}</p>
+            </div>
+
+            <div class="phone">
+              <i class="bi bi-phone"></i>
+              <h4>Call:</h4>
+              <p>+{{ restaurant.phone }}</p>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="col-lg-8 mt-5 mt-lg-0">
+
+          <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+              </div>
+              <div class="col-md-6 form-group mt-3 mt-md-0">
+                <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+              </div>
+            </div>
+            <div class="form-group mt-3">
+              <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+            </div>
+            <div class="form-group mt-3">
+              <textarea class="form-control" name="message" rows="8" placeholder="Message" required></textarea>
+            </div>
+            <div class="my-3">
+              <div class="loading">Loading</div>
+              <div class="error-message"></div>
+              <div class="sent-message">Your message has been sent. Thank you!</div>
+            </div>
+            <div class="text-center"><button type="submit">Send Message</button></div>
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section><!-- End Contact Section -->
+
+</main><!-- End #main -->
+
+{% endblock %}

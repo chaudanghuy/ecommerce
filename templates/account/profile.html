@@ -5,14 +5,46 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">Profile</div>
-            <div class="card-body">
-                <h3>Welcome, {{ user.username }}</h3>
-                <!-- Display user's profile information here -->
-            </div>
+    <div class="container">
+        <h1 class="mt-5">Booking Management</h1>
+        <div class="row">
+          <!-- Bàn 1 -->
+          <div class="col-md-2 table-card reserved"> <!-- Thêm lớp reserved cho ô bàn đã đặt -->
+            <h4>Table 1 <sup>BOOKED</sup></h4>            
+            <p><i class="fas fa-users"></i> 4</p>
+            <p>Date: 2024-04-29</p>
+            <button class="btn btn-primary">Bill</button>
+            <button class="btn btn-success">Payout</button>
+          </div>
+          <!-- Bàn 2 -->
+          <div class="col-md-2 table-card">
+            <h4>Table 2</h4>
+            <p></p>
+            <button class="btn btn-primary">Book</button>
+          </div>
+          <!-- Bàn 3 -->
+          <div class="col-md-2 table-card"> <!-- Thêm lớp reserved cho ô bàn đã đặt -->
+            <h4>Table 3</h4>            
+            <p><i class="fas fa-users"></i> 5</p>
+            <p>Date: 2024-04-28</p>
+            <button class="btn btn-primary">Bill</button>
+            <button class="btn btn-success">Payout</button>
+          </div>
+          <!-- Bàn 4 -->
+          <div class="col-md-2 table-card">
+            <h4>Table 4</h4>
+            <p></p>
+            <button class="btn btn-primary">Book</button>
+          </div>
+          <!-- Bàn 5 -->
+          <div class="col-md-2 table-card reserved"> <!-- Thêm lớp reserved cho ô bàn đã đặt -->
+            <h4>Table 5 <sup>BOOKED</sup></h4>            
+            <p><i class="fas fa-users"></i> 10</p>
+            <p>Date: 2024-04-28</p>
+            <button class="btn btn-primary">Bill</button>
+            <button class="btn btn-success">Payout</button>
+          </div>
         </div>
-    </div>
+      </div>
 </div>
 {% endblock %}

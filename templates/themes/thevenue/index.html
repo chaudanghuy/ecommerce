@@ -20,7 +20,10 @@
     <link href="{% static '/demo2/plugins/jquery-timepicker/jquery.timepicker.css' %}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="{% static '/demo2/styles/main_styles.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static '/demo2/styles/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/generic/css/custom.css' %}">
     <link href="{% static '/demo2/images/site/favicon.ico' %}" rel="icon">
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -50,7 +53,8 @@
                                     <li><a href="#contact">contact</a></li>
                                 </ul>
                             </nav>
-                            <div class="reservations_phone ml-auto">Reservations: +{{ restaurant.phone }}</div>
+                            <div class="reservations_phone ml-auto" data-toggle="modal" data-target="#bookingModal">
+                                Reservations: +{{ restaurant.phone }}</div>
                         </div>
                     </div>
                 </div>
@@ -354,81 +358,164 @@
             </div>
         </div>
 
-        <!-- Footer -->
-
-        <footer class="footer">
-            <div class="container">
-                <div class="row">
-
-                    <!-- Footer Logo -->
-                    <div class="col-lg-3 footer_col">
-                        <div class="footer_logo">
-                            <div class="footer_logo_title"><img src="{% static '/demo2/images/site/logo.png' %}" />
+        <!-- Reservation Form -->
+        <!-- Modal -->
+        <!-- Modal -->
+        <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bookingModalLabel">Booking VietAn Restaurant</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col date-header">Mon</div>
+                            <div class="col date-header">Tue</div>
+                            <div class="col date-header">Wed</div>
+                            <div class="col date-header">Thu</div>
+                            <div class="col date-header">Fri</div>
+                            <div class="col date-header">Sat</div>
+                            <div class="col date-header">Sun</div>
+                        </div>
+                        <div class="row mb-3">
+                            <!-- Thêm thẻ div để chứa ngày -->
+                            <div id="daysContainer" class="d-flex justify-content-between align-items-center">
+                                <div class="corner-box choose">29</div>
+                                <div class="corner-box">30</div>
+                                <div class="corner-box">1</div>
+                                <div class="corner-box">2</div>
+                                <div class="corner-box">3</div>
+                                <div class="corner-box">4</div>
+                                <div class="corner-box">5</div>
                             </div>
-                            <div class="footer_logo_subtitle">restaurant</div>
                         </div>
-                        <div class="copyright">
-                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                            <p style="line-height: 1.2;">Copyright &copy;
-                                <script>document.write(new Date().getFullYear());</script> All rights reserved
-                            </p>
-                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        <hr>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="numPeople"><i class="far fa-user"></i> Số Người</label>
+                                <select class="form-control" id="numPeople">
+                                    <option value="1">1 Người</option>
+                                    <option value="2">2 Người</option>
+                                    <option value="2">3 Người</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="bookingTime"><i class="far fa-clock"></i> Chọn Giờ</label>
+                                <select class="form-control" id="bookingTime">
+                                    <option value="12:00">12:00</option>
+                                    <option value="13:00">13:00</option>
+                                    <option value="14:00">14:00</option>
+                                    <!-- Add more options as needed -->
+                                </select>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Footer About -->
-                    <div class="col-lg-6 footer_col">
-                        <div class="footer_about">
-                            <p>Immerse yourself in a culinary journey through the vibrant flavors of Asia, where every
-                                dish is crafted with care to tantalize your taste buds..</p>
+                        <div class="alert alert-danger" id="errorMessage">
+                            We are fully booked today. Please join our waiting list!
                         </div>
-                    </div>
-
-                    <!-- Footer Contact -->
-                    <div class="col-lg-3 footer_col">
-                        <div class="footer_contact">
-                            <ul>
-                                <li class="d-flex flex-row align-items-start justify-content-start">
-                                    <div>
-                                        <div class="footer_contact_title">Address:</div>
-                                    </div>
-                                    <div class="footer_contact_text">{{ restaurant.address }}</div>
-                                </li>
-                                <li class="d-flex flex-row align-items-start justify-content-start">
-                                    <div>
-                                        <div class="footer_contact_title">Phone:</div>
-                                    </div>
-                                    <div class="footer_contact_text">+{{ restaurant.phone }}</div>
-                                </li>
-                                <li class="d-flex flex-row align-items-start justify-content-start">
-                                    <div>
-                                        <div class="footer_contact_title">Email:</div>
-                                    </div>
-                                    <div class="footer_contact_text">{{ restaurant.email }}</div>
-                                </li>
-                            </ul>
+                        <hr>
+                        <div class="row mb-3">
+                            <div id="daysContainer" class="d-flex justify-content-between align-items-center">
+                                <div class="corner-box choose">1:00 pm</div>
+                                <div class="corner-box choose">1:30 pm</div>
+                                <div class="corner">
+                                    <div class="corner-box booked">2:00 pm</div>
+                                    <div class="corner-text">Fully booked</div>
+                                </div>
+                                <div class="corner-box choose">2:30 pm</div>
+                                <div class="corner-box choose">3:00 pm</div>
+                                <div class="corner-box choose">3:30 pm</div>
+                                <div class="corner-box choose">4:00 pm</div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                            <button type="button" class="btn btn-primary" id="submitBooking">Đặt Bàn</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </footer>
-    </div>
 
-    <script src="{% static '/demo2/js/jquery-3.2.1.min.js' %}"></script>
-    <script src="{% static '/demo2/styles/bootstrap-4.1.2/popper.js' %}"></script>
-    <script src="{% static '/demo2/styles/bootstrap-4.1.2/bootstrap.min.js' %}"></script>
-    <script src="{% static '/demo2/plugins/greensock/TweenMax.min.js' %}"></script>
-    <script src="{% static '/demo2/plugins/greensock/TimelineMax.min.js' %}"></script>
-    <script src="{% static '/demo2/plugins/scrollmagic/ScrollMagic.min.js' %}"></script>
-    <script src="{% static '/demo2/plugins/greensock/animation.gsap.min.js' %}"></script>
-    <script src="{% static '/demo2/plugins/greensock/ScrollToPlugin.min.js' %}"></script>
-    <script src="{% static '/demo2/plugins/OwlCarousel2-2.2.1/owl.carousel.js' %}"></script>
-    <script src="{% static '/demo2/plugins/easing/easing.js' %}"></script>
-    <script src="{% static '/demo2/plugins/parallax-js-master/parallax.min.js' %}"></script>
-    <script src="{% static '/demo2/plugins/colorbox/jquery.colorbox-min.js' %}"></script>
-    <script src="{% static '/demo2/plugins/jquery-datepicker/jquery-ui.js' %}"></script>
-    <script src="{% static '/demo2/plugins/jquery-timepicker/jquery.timepicker.js' %}"></script>
-    <script src="{% static '/demo2/js/custom.js' %}"></script>
+            <!-- Footer -->
+
+            <footer class="footer">
+                <div class="container">
+                    <div class="row">
+
+                        <!-- Footer Logo -->
+                        <div class="col-lg-3 footer_col">
+                            <div class="footer_logo">
+                                <div class="footer_logo_title"><img src="{% static '/demo2/images/site/logo.png' %}" />
+                                </div>
+                                <div class="footer_logo_subtitle">restaurant</div>
+                            </div>
+                            <div class="copyright">
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                <p style="line-height: 1.2;">Copyright &copy;
+                                    <script>document.write(new Date().getFullYear());</script> All rights reserved
+                                </p>
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            </div>
+                        </div>
+
+                        <!-- Footer About -->
+                        <div class="col-lg-6 footer_col">
+                            <div class="footer_about">
+                                <p>Immerse yourself in a culinary journey through the vibrant flavors of Asia, where
+                                    every
+                                    dish is crafted with care to tantalize your taste buds..</p>
+                            </div>
+                        </div>
+
+                        <!-- Footer Contact -->
+                        <div class="col-lg-3 footer_col">
+                            <div class="footer_contact">
+                                <ul>
+                                    <li class="d-flex flex-row align-items-start justify-content-start">
+                                        <div>
+                                            <div class="footer_contact_title">Address:</div>
+                                        </div>
+                                        <div class="footer_contact_text">{{ restaurant.address }}</div>
+                                    </li>
+                                    <li class="d-flex flex-row align-items-start justify-content-start">
+                                        <div>
+                                            <div class="footer_contact_title">Phone:</div>
+                                        </div>
+                                        <div class="footer_contact_text">+{{ restaurant.phone }}</div>
+                                    </li>
+                                    <li class="d-flex flex-row align-items-start justify-content-start">
+                                        <div>
+                                            <div class="footer_contact_title">Email:</div>
+                                        </div>
+                                        <div class="footer_contact_text">{{ restaurant.email }}</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+        <script src="{% static '/demo2/js/jquery-3.2.1.min.js' %}"></script>
+        <script src="{% static '/demo2/styles/bootstrap-4.1.2/popper.js' %}"></script>
+        <script src="{% static '/demo2/styles/bootstrap-4.1.2/bootstrap.min.js' %}"></script>
+        <script src="{% static '/demo2/plugins/greensock/TweenMax.min.js' %}"></script>
+        <script src="{% static '/demo2/plugins/greensock/TimelineMax.min.js' %}"></script>
+        <script src="{% static '/demo2/plugins/scrollmagic/ScrollMagic.min.js' %}"></script>
+        <script src="{% static '/demo2/plugins/greensock/animation.gsap.min.js' %}"></script>
+        <script src="{% static '/demo2/plugins/greensock/ScrollToPlugin.min.js' %}"></script>
+        <script src="{% static '/demo2/plugins/OwlCarousel2-2.2.1/owl.carousel.js' %}"></script>
+        <script src="{% static '/demo2/plugins/easing/easing.js' %}"></script>
+        <script src="{% static '/demo2/plugins/parallax-js-master/parallax.min.js' %}"></script>
+        <script src="{% static '/demo2/plugins/colorbox/jquery.colorbox-min.js' %}"></script>
+        <script src="{% static '/demo2/plugins/jquery-datepicker/jquery-ui.js' %}"></script>
+        <script src="{% static '/demo2/plugins/jquery-timepicker/jquery.timepicker.js' %}"></script>
+        <script src="{% static '/demo2/js/custom.js' %}"></script>
+        <script src="{% static 'generic/js/custom.js' %}"></script>
 </body>
 
 </html>

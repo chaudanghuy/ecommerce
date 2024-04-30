@@ -3,16 +3,17 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    # Customer
+    path('', views.customer_index, name='home'),
+    path('book', views.customer_book, name='book'),
     
-    # demo
-    path('demo1', views.customer_demo1, name='demo1'),
-    path('demo2', views.customer_demo2, name='demo2'),
+    # Api
+    path('api/check-available-time-slots', views.check_available_time_slots, name='check-available-time-slots'),
     
     # Test
     path('create-test-user', views.create_test_user, name='create-test-user'),
     
     # accounts
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('account/', include('django.contrib.auth.urls')),
     path('accounts/profile/', views.admin_profile, name='profile'),
 ]
