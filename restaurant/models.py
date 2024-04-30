@@ -18,6 +18,7 @@ class Restaurant(models.Model):
     
 class User(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    fullname = models.CharField(max_length=100, default='')
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     email = models.CharField(max_length=100)    
@@ -37,9 +38,9 @@ class Customer(models.Model):
 class MyTable(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
-    table_number = models.IntegerField()
+    table_number = models.CharField(max_length=10)
     capacity = models.IntegerField()
-    status = models.CharField(max_length=20, choices=Status.choices, default=Status.AVAILABLE)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.AVAILABLE)    
     
 class Booking(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -47,11 +48,12 @@ class Booking(models.Model):
     table = models.ForeignKey(MyTable, on_delete=models.CASCADE)
     booking_code = models.CharField(max_length=100,  default=uuid.uuid4)
     booking_date = models.DateField()
-    booking_time = models.TimeField()
+    booking_time = models.TextField()
+    duration = models.IntegerField(default=90)
     number_of_guests = models.IntegerField()
     booking_status = models.CharField(max_length=20, choices=BookingStatus.choices, default=BookingStatus.PENDING)
-    special_requests = models.TextField()
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    special_requests = models.TextField(default='')
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     tax = models.IntegerField(default=0) 
     booking_end_time = models.TimeField(default='23:59:59')
     

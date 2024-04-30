@@ -1,7 +1,7 @@
 var container = $('.book-a-table form').length > 0 ? $('.book-a-table form').parent() : "body";
 $(function () {
-    $('input[name="date"]').datepicker({
-        format: 'mm/dd/yyyy',
+    $('#datepicker').datepicker({
+        format: 'yyyy-mm-dd',
         container: container,
         todayHighlight: true,
         autoclose: true,
@@ -9,10 +9,10 @@ $(function () {
     });
 
     $('#timePicker').timepicker({
-        timeFormat: 'h:mm p',
+        timeFormat: 'H:mm',
         interval: 30,
         minTime: '10',
-        maxTime: '10:00pm',
+        maxTime: '22:00',
         defaultTime: '11',
         startTime: '10:00',
         dynamic: false,

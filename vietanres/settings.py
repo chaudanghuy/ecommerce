@@ -20,6 +20,8 @@ load_dotenv()
 DATABASE_TYPE = os.getenv("DATABASE_TYPE")
 ENV = os.getenv("ENV")
 THEME = os.getenv("THEME")
+TOTAL_TABLE = os.getenv("TOTAL_TABLE")
+RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
