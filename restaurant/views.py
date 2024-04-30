@@ -158,16 +158,6 @@ def check_available_time_slots(request):
 @require_POST
 def book(request):
     if request.method == 'POST':
-        captcha_response = request.POST.get('g-recaptcha-response')
-        data = {
-            'secret': settings.RECAPTCHA_PRIVATE_KEY,
-            'response': captcha_response
-        }
-        response = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        result = response.json()
-        if not result['success']:
-            return HttpResponse('CAPTCHA verification failed.')
-        
         data = request.POST 
         booking_date = data.get('booking_date')
         booking_time = data.get('booking_time')

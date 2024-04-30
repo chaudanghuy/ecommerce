@@ -22,6 +22,7 @@ ENV = os.getenv("ENV")
 THEME = os.getenv("THEME")
 TOTAL_TABLE = os.getenv("TOTAL_TABLE")
 RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_recaptcha",
     "restaurant",
 ]
 
