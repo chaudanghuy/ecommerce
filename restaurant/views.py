@@ -284,9 +284,9 @@ def admin_profile(request):
             'total_customers': booking.number_of_guests,
             'table': booking.table.table_number,
             'booking_code': booking.booking_code,
-            'booking_phone': booking.customer.phone,
+            'booking_phone': booking.table.table_number + '-' + str(booking.customer.phone),
             'number_of_guests': booking.table.table_number + '-' + str(booking.number_of_guests),
-            'booking_name': booking.customer.user.fullname
+            'booking_name': booking.table.table_number + '-' +  str(booking.customer.user.email)
         })
 
     # Generate a list of available time slots based on total people
@@ -312,20 +312,11 @@ def admin_profile(request):
         table_book_phones = [slot['booking_phone'] for slot in booked_time_slots if
                              slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]
         table_book_total_guests = [slot['number_of_guests'] for slot in booked_time_slots if
-                                   slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]
-
-        table_book_phones_list = []
-        for phone in table_book_phones:
-            if phone not in table_book_phones_list:
-                table_book_phones_list.append(phone)
-
-        if len(table_book_phones_list) == 0:
-            table_book_phones_result = "None"
-        elif len(table_book_phones_list) > 1:
-            table_book_phones_result = str(table_book_phones_list[0]) + ", " + str(table_book_phones_list[1])
-        else:
-            table_book_phones_result = table_book_phones_list[0]        
+                                   slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]         
+        table_book_name = [slot['booking_name'] for slot in booked_time_slots if
+                           slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]  
     
+        print(table_book_phones)
                     
         if not slot_already_booked:
             available_time_slots.append({
@@ -341,8 +332,9 @@ def admin_profile(request):
                 'flag': 'booked',
                 'table': table_booked,
                 'booking_code': table_codes,
-                'booking_phone':table_book_phones_result,
-                'number_of_guests': table_book_total_guests
+                'booking_phone':table_book_phones,
+                'number_of_guests': table_book_total_guests,
+                'table_book_name': table_book_name
             })
 
         current_time += timedelta(minutes=30)  # Assuming each slot is 60 minutes

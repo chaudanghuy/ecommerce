@@ -39,13 +39,19 @@
                     <td>Table {{ table.table_number }}</td>
                     {% for booking_time in available_time_slots %}
                       <td style="background-color: {% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}powderblue;{% endif %}" data-booking-id={% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}{{booking_time.booking_phone }}{% else %}{{booking_time.start_time}}{% endif %}>
-                        {% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}
-                          Phone: <small id="myInput">{{booking_time.booking_phone}}</small>
-                          <br>                                                                              
-                          {% for number_of_guest in booking_time.number_of_guests %}
-                            {% with parts=number_of_guest|split:"-"  %}                              
+                        {% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}                           
+                          {% for book_phone in booking_time.booking_phone %}
+                            {% with parts=book_phone|split:"-"  %}                              
                               {% if parts.0 == table.table_number %}                                                          
-                                Customers <sup><strong>{{parts.1}}  <i class="fas fa-users"></i> </strong></sup>     
+                                <small id="myInput">{{parts.1}}</small>
+                              {% endif %}                              
+                            {% endwith %}                            
+                          {% endfor %}   
+                          -                                                                           
+                          {% for book_email in booking_time.table_book_name %}
+                            {% with parts=book_email|split:"-"  %}                              
+                              {% if parts.0 == table.table_number %}                                                          
+                                <small>{{parts.1}}</small>
                               {% endif %}                              
                             {% endwith %}                            
                           {% endfor %}                                                      
