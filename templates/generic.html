@@ -73,7 +73,7 @@
         });
 
         $("#find-bookings").on('click', function () {
-            var url = "http://127.0.0.1:8000/accounts/profile?date=" + $("#datepicker").val();
+            var url = window.location.origin + "/accounts/profile?date=" + $("#datepicker").val();
             window.location.href = url;
         });
 
