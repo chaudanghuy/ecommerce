@@ -10,6 +10,8 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">  
+    <!-- Link Bootstrap Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <!-- Your custom CSS (if any) -->
     <link href="{% static '/generic/css/custom.css' %}" rel="stylesheet">
 </head>
@@ -42,5 +44,20 @@
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      $('#datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+        defaultDate: new Date(),
+        autoclose: true
+      });
+    });
+
+    $("#find-bookings").on('click', function() {
+        var url = "http://127.0.0.1:8000/accounts/profile?date=" + $("#datepicker").val();
+        window.location.href = url;
+    });
+  </script>  
 </body>
 </html>

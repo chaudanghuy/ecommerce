@@ -8,42 +8,40 @@
     <div class="container">
         <h1 class="mt-5">Booking Management</h1>
         <div class="row">
-          <!-- Bàn 1 -->
-          <div class="col-md-2 table-card reserved"> <!-- Thêm lớp reserved cho ô bàn đã đặt -->
-            <h4>Table 1 <sup>BOOKED</sup></h4>            
-            <p><i class="fas fa-users"></i> 4</p>
-            <p>Date: 2024-04-29</p>
-            <button class="btn btn-primary">Bill</button>
-            <button class="btn btn-success">Payout</button>
+          <div class="input-group">
+            <input type="text" class="form-control rounded" id="datepicker" placeholder="Select date" value={{date}}>
+            <div class="input-group-append">
+              <span id="find-bookings" class="input-group-text rounded-0">Find bookings</span>
+            </div>
           </div>
-          <!-- Bàn 2 -->
-          <div class="col-md-2 table-card">
-            <h4>Table 2</h4>
-            <p></p>
-            <button class="btn btn-primary">Book</button>
-          </div>
-          <!-- Bàn 3 -->
-          <div class="col-md-2 table-card"> <!-- Thêm lớp reserved cho ô bàn đã đặt -->
-            <h4>Table 3</h4>            
-            <p><i class="fas fa-users"></i> 5</p>
-            <p>Date: 2024-04-28</p>
-            <button class="btn btn-primary">Bill</button>
-            <button class="btn btn-success">Payout</button>
-          </div>
-          <!-- Bàn 4 -->
-          <div class="col-md-2 table-card">
-            <h4>Table 4</h4>
-            <p></p>
-            <button class="btn btn-primary">Book</button>
-          </div>
-          <!-- Bàn 5 -->
-          <div class="col-md-2 table-card reserved"> <!-- Thêm lớp reserved cho ô bàn đã đặt -->
-            <h4>Table 5 <sup>BOOKED</sup></h4>            
-            <p><i class="fas fa-users"></i> 10</p>
-            <p>Date: 2024-04-28</p>
-            <button class="btn btn-primary">Bill</button>
-            <button class="btn btn-success">Payout</button>
-          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-header">
+                Bookings
+              </div>
+              <div class="card-body">
+                <table class="table table-hover table-bordered">
+                  <tr>
+                    <th>Table</th>
+                    {% for booking_time in available_time_slots %}
+                      <th>{{booking_time.start_time}}</th>
+                    {% endfor %}
+                  </tr>
+                  {% for table in tables %}
+                  <tr>
+                    <td>Table {{ table.table_number }}</td>
+                    {% for booking_time in available_time_slots %}
+                      <th style="background-color: {% if booking_time.flag == 'booked' %}'cadetblue'{% endif %}"></th>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </table>
+              </div>
+            </div>  
+          </div>        
         </div>
       </div>
 </div>

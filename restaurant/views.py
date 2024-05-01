@@ -224,7 +224,75 @@ def book(request):
 # Admin
 @login_required
 def admin_profile(request):
-    return render(request, 'account/profile.html')
+    date = request.GET.get('date')
+    
+    try:
+        date = datetime.strptime(date, '%Y-%m-%d').strftime('%Y-%m-%d')
+    except (TypeError, ValueError):
+        try:
+            date = datetime.strptime(date, '%m/%d/%Y').strftime('%Y-%m-%d')
+        except (TypeError, ValueError):
+            date = datetime.today().strftime('%Y-%m-%d')
+    
+    if not date:
+        date = datetime.today().strftime('%Y-%m-%d')
+
+    if not date:
+        return JsonResponse({'message': 'Date is required.'}, status=400)
+
+    try:
+        booking_date = datetime.strptime(date, '%Y-%m-%d')
+    except ValueError:
+        return JsonResponse({'message': 'Invalid date format. Please provide date in YYYY-MM-DD format.'}, status=400)
+
+    # Get all bookings for the given date
+    bookings = Booking.objects.filter(
+        booking_date=booking_date.date()
+    )  
+
+    # Create a list of all booked time slots
+    booked_time_slots = []
+    for booking in bookings:
+        start_time = booking.booking_time
+        end_time = datetime.strptime(start_time, '%H:%M') + timedelta(minutes=booking.duration)
+        booked_time_slots.append({
+            'start_time': start_time,  # Format time in AM/PM
+            'end_time': end_time.strftime('%H:%M'),
+            'total_customers': booking.number_of_guests
+        })    
+
+    # Generate a list of available time slots based on total people
+    available_time_slots = []
+    current_time = datetime(booking_date.year, booking_date.month, booking_date.day, 8, 0)  # Assuming restaurant opens at 8:00 AM
+    closing_time = datetime(booking_date.year, booking_date.month, booking_date.day, 22, 0)  # Assuming restaurant closes at 10:00 PM
+
+    while current_time < closing_time:
+        slot_start_time = current_time
+        slot_end_time = current_time + timedelta(minutes=60)  # Assuming each slot is 60 minutes
+        
+        slot_already_booked = any(
+            slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']
+            for slot in booked_time_slots
+        )
+        
+        if not slot_already_booked:
+            available_time_slots.append({
+                'start_time': slot_start_time.strftime('%H:%M'),
+                'end_time': slot_end_time.strftime('%H:%M'),
+                'flag': 'not-booked'
+            })
+        else:
+            available_time_slots.append({
+                'start_time': slot_start_time.strftime('%H:%M'),
+                'end_time': slot_end_time.strftime('%H:%M'),
+                'flag': 'booked'
+            })
+
+        current_time += timedelta(minutes=60)  # Assuming each slot is 60 minutes
+
+    tables = MyTable.objects.all()
+
+    return render(request, 'account/profile.html', {'available_time_slots': available_time_slots, 'tables': tables, 'date': date})
 
 # Test
 def create_test_user(request):
