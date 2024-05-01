@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,17 +10,20 @@
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">  
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <!-- Link Bootstrap Datepicker CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <!-- Your custom CSS (if any) -->
     <link href="{% static '/generic/css/custom.css' %}" rel="stylesheet">
     <link href="{% static '/demo1/assets/img/favicon.ico' %}" rel="icon">
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Viet-An Restaurant</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -40,49 +44,66 @@
     </div>
 
     <!-- Bootstrap Icons -->
-  <script src="https://unpkg.com/bootstrap-icons"></script>
-  <!-- Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-  <script>
-    $(document).ready(function(){
-      $('#datepicker').datepicker({
-        format: 'yyyy-mm-dd',
-        defaultDate: new Date(),
-        autoclose: true
-      });
-    });
-
-    $("#find-bookings").on('click', function() {
-        var url = "http://127.0.0.1:8000/accounts/profile?date=" + $("#datepicker").val();
-        window.location.href = url;
-    });
-
-    function mergeCells() {
-        $('#booking-table tr').each(function() {
-            var prevBookingId = null;
-            var colspan = 1;
-
-            $('td', this).each(function() {
-                var bookingId = $(this).data('booking-id');
-
-                if (bookingId === prevBookingId) {
-                    colspan++;
-                    $(this).prevAll('[data-booking-id="' + bookingId + '"]').attr('colspan', colspan);
-                    $(this).remove();
-                } else {
-                    prevBookingId = bookingId;
-                    colspan = 1;
-                }
+    <script src="https://unpkg.com/bootstrap-icons"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                defaultDate: new Date(),
+                autoclose: true
             });
         });
-    }
 
-    // Call the mergeCells function on page load
-    mergeCells();
+        $("#find-bookings").on('click', function () {
+            var url = "http://127.0.0.1:8000/accounts/profile?date=" + $("#datepicker").val();
+            window.location.href = url;
+        });
 
-  </script>  
+        function mergeCells() {
+            $('#booking-table tr').each(function () {
+                var prevBookingId = null;
+                var colspan = 1;
+
+                $('td', this).each(function () {
+                    var bookingId = $(this).data('booking-id');
+
+                    if (bookingId === prevBookingId) {
+                        colspan++;
+                        $(this).prevAll('[data-booking-id="' + bookingId + '"]').attr('colspan', colspan);
+                        $(this).remove();
+                    } else {
+                        prevBookingId = bookingId;
+                        colspan = 1;
+                    }
+                });
+            });
+        }
+
+        // Call the mergeCells function on page load
+        mergeCells();
+
+        function copyText() {
+            // Get the text field
+            var copyText = document.getElementById("myInput");
+
+            // Select the text field
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
+
+            // Copy the text inside the text field
+            navigator.clipboard.writeText(copyText.value);
+
+            // Alert the copied text
+            alert("Copied the text: " + copyText.value);
+        }
+
+    </script>
 </body>
+
 </html>

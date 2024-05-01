@@ -1,6 +1,8 @@
 <!-- profile.html -->
 {% extends 'generic.html' %}
 
+{% load custom_filters %}
+
 {% block title %}Booking Management{% endblock %}
 
 {% block content %}
@@ -38,12 +40,17 @@
                     {% for booking_time in available_time_slots %}
                       <td style="background-color: {% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}powderblue;{% endif %}" data-booking-id={% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}{{booking_time.booking_phone }}{% else %}{{booking_time.start_time}}{% endif %}>
                         {% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}
-                          <a class="book-detail" type="button" class="link link-light" data-bs-toggle="modal" data-bs-target="#exampleModal" data-table-number={{table.table_number}} data-booking-time={{ booking_time.start_time }}>
-                            Phone: <small>{{booking_time.booking_phone}}</small>
-                            <br>
-                            <i class="fas fa-users"></i> <small>{{booking_time.number_of_guests}}</small>
-                          </a>
-                        {% endif %}
+                          Phone: <small id="myInput">{{booking_time.booking_phone}}</small>
+                          <br>                                                                              
+                          {% for number_of_guest in booking_time.number_of_guests %}
+                            {% with parts=number_of_guest|split:"-"  %}                              
+                              {% if parts.0 == table.table_number %}                                                          
+                                Customers <sup><strong>{{parts.1}}  <i class="fas fa-users"></i> </strong></sup>     
+                              {% endif %}                              
+                            {% endwith %}                            
+                          {% endfor %}                                                      
+                            
+                      {% endif %}
                       </td>
                     {% endfor %}
                   </tr>

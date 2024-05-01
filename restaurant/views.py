@@ -168,15 +168,31 @@ def book(request):
         try:
             booking_datetime = datetime.strptime(booking_date + ' ' + booking_time, '%Y-%m-%d %H:%M')
         except ValueError:
-            return HttpResponse('Invalid booking date or time.')
+            return HttpResponse('Invalid booking date or time.')        
         
-        bookings_in_slot = Booking.objects.filter(
-            booking_date__range=(booking_datetime, booking_datetime + timedelta(minutes=duration)),        
-        )  
+        end_time_check = (booking_datetime + timedelta(minutes=duration)).strftime('%H:%M')
+        if booking_datetime.hour >= 22:
+            return HttpResponse('We are fully booked at this time')        
         
+        # Get all bookings for the given date
+        bookings = Booking.objects.filter(
+            booking_date=booking_date
+        )
+        
+        bookings_in_slot = []
+        for booking in bookings:
+            start_time_booking = booking.booking_time
+            end_time_booking = (datetime.strptime(booking.booking_time, '%H:%M') + timedelta(minutes=booking.duration)).strftime('%H:%M')
+            
+            end_time = (booking_datetime + timedelta(minutes=duration)).strftime('%H:%M')
+            if start_time_booking <= booking_time <= end_time_booking:
+                bookings_in_slot.append(booking)   
+            elif booking_time <= start_time_booking <= end_time:
+                bookings_in_slot.append(booking)                                    
+                
         # Remove hardcoded
-        if bookings_in_slot.count() == int(settings.TOTAL_TABLE):
-            return HttpResponse('Table is not available at this time.')
+        if bookings_in_slot and len(bookings_in_slot) > int(settings.TOTAL_TABLE):
+            return HttpResponse('We are fully booked at this time.')
         
         available_tables = MyTable.objects.filter(
             status=Status.AVAILABLE,
@@ -186,7 +202,7 @@ def book(request):
         ).distinct()            
         
         if len(available_tables) < tables_required:
-            return HttpResponse('Table is not available at this time.')                          
+            return HttpResponse('We are fully booked at this time')                          
         
         # Create user
         current_user = User.objects.filter(username=data.get('email')).first()
@@ -220,7 +236,7 @@ def book(request):
                 special_requests=data.get('special_requests'),
             ) 
                                                
-    return HttpResponse('Booking successful.', status=201)
+    return HttpResponse('Your booking request was sent. We will call back or send an Email to confirm your reservation. Thank you!', status=201)
 
 # Admin
 @login_required
@@ -264,13 +280,13 @@ def admin_profile(request):
             'table': booking.table.table_number,
             'booking_code': booking.booking_code,
             'booking_phone': booking.customer.phone,
-            'number_of_guests': booking.number_of_guests,
+            'number_of_guests': booking.table.table_number + '-' + str(booking.number_of_guests),
             'booking_name': booking.customer.user.fullname
         })
 
     # Generate a list of available time slots based on total people
     available_time_slots = []
-    current_time = datetime(booking_date.year, booking_date.month, booking_date.day, 8, 0)  # Assuming restaurant opens at 8:00 AM
+    current_time = datetime(booking_date.year, booking_date.month, booking_date.day, 10, 0)  # Assuming restaurant opens at 8:00 AM
     closing_time = datetime(booking_date.year, booking_date.month, booking_date.day, 22, 0)  # Assuming restaurant closes at 10:00 PM
 
     table_codes_with_id = []
@@ -301,21 +317,10 @@ def admin_profile(request):
         if len(table_book_phones_list) == 0:
             table_book_phones_result = "None"
         elif len(table_book_phones_list) > 1:
-            table_book_phones_result = table_book_phones_list[0] + ", " + table_book_phones_list[1]
+            table_book_phones_result = str(table_book_phones_list[0]) + ", " + str(table_book_phones_list[1])
         else:
-            table_book_phones_result = table_book_phones_list[0]
-
-        table_book_total_guests_list = []
-        for guests in table_book_total_guests:
-            if guests not in table_book_total_guests_list:
-                table_book_total_guests_list.append(guests)
-        
-        if len(table_book_total_guests_list) == 0:
-            table_book_total_guests_result = "None"
-        elif len(table_book_total_guests_list) > 1:
-            table_book_total_guests_result = table_book_total_guests_list[0] + ", " + table_book_total_guests_list[1]
-        else:
-            table_book_total_guests_result = table_book_total_guests_list[0]
+            table_book_phones_result = table_book_phones_list[0]        
+    
                     
         if not slot_already_booked:
             available_time_slots.append({
@@ -332,10 +337,10 @@ def admin_profile(request):
                 'table': table_booked,
                 'booking_code': table_codes,
                 'booking_phone':table_book_phones_result,
-                'number_of_guests': table_book_total_guests_result
+                'number_of_guests': table_book_total_guests
             })
 
-        current_time += timedelta(minutes=60)  # Assuming each slot is 60 minutes
+        current_time += timedelta(minutes=30)  # Assuming each slot is 60 minutes
 
     tables = MyTable.objects.all()
 
