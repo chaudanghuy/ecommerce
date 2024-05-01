@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.customer_index, name='home'),
     path('book', views.customer_book, name='book'),
     path('book-table', views.book, name='book-table'),
+    path('gallery', views.customer_gallery, name='gallery'),
 
     # Account
     path('manage', RedirectView.as_view(url='/accounts/login'), name='manage'),
@@ -18,6 +19,7 @@ urlpatterns = [
     
     # Test
     path('create-test-user', views.create_test_user, name='create-test-user'),
+    path('test-email', views.test_send_mail, name='test-email'),
     
     # accounts
     path('accounts/', include('django.contrib.auth.urls')),
