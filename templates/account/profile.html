@@ -1,12 +1,12 @@
 <!-- profile.html -->
 {% extends 'generic.html' %}
 
-{% block title %}Profile{% endblock %}
+{% block title %}Booking Management{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="container">
-        <h1 class="mt-5">Booking Management</h1>
+        <h1 class="mt-5"><i class="fas fa-utensils"></i>  Booking Management</h1>
         <div class="row">
           <div class="input-group">
             <input type="text" class="form-control rounded" id="datepicker" placeholder="Select date" value={{date}}>
@@ -23,9 +23,11 @@
                 Bookings
               </div>
               <div class="card-body">
-                <table class="table table-hover table-bordered">
+                <table id="booking-table" class="table table-hover table-bordered table-responsive">
                   <tr>
-                    <th>Table</th>
+                    <th>
+                      Table                       
+                    </th>
                     {% for booking_time in available_time_slots %}
                       <th>{{booking_time.start_time}}</th>
                     {% endfor %}
@@ -34,7 +36,15 @@
                   <tr>
                     <td>Table {{ table.table_number }}</td>
                     {% for booking_time in available_time_slots %}
-                      <th style="background-color: {% if booking_time.flag == 'booked' %}'cadetblue'{% endif %}"></th>
+                      <td style="background-color: {% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}powderblue;{% endif %}" data-booking-id={% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}{{booking_time.booking_phone }}{% else %}{{booking_time.start_time}}{% endif %}>
+                        {% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}
+                          <a class="book-detail" type="button" class="link link-light" data-bs-toggle="modal" data-bs-target="#exampleModal" data-table-number={{table.table_number}} data-booking-time={{ booking_time.start_time }}>
+                            Phone: <small>{{booking_time.booking_phone}}</small>
+                            <br>
+                            <i class="fas fa-users"></i> <small>{{booking_time.number_of_guests}}</small>
+                          </a>
+                        {% endif %}
+                      </td>
                     {% endfor %}
                   </tr>
                   {% endfor %}
@@ -45,4 +55,32 @@
         </div>
       </div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Booking Detail</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h1>Booking Confirmation</h1>
+        <p>Your booking at Restaurant Viet An has been confirmed.</p>
+        <p>Name: <span></span></p>
+        <p>Email: <span></span></p>
+        <p>Phone: <span></span></p>
+        <p>Total Customers: <span></span></p>
+        <p>Special Request: <span></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

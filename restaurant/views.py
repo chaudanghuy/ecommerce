@@ -173,6 +173,7 @@ def book(request):
         bookings_in_slot = Booking.objects.filter(
             booking_date__range=(booking_datetime, booking_datetime + timedelta(minutes=duration)),        
         )  
+        
         # Remove hardcoded
         if bookings_in_slot.count() == int(settings.TOTAL_TABLE):
             return HttpResponse('Table is not available at this time.')
@@ -251,6 +252,7 @@ def admin_profile(request):
     )  
 
     # Create a list of all booked time slots
+    booked_tables = []
     booked_time_slots = []
     for booking in bookings:
         start_time = booking.booking_time
@@ -258,14 +260,20 @@ def admin_profile(request):
         booked_time_slots.append({
             'start_time': start_time,  # Format time in AM/PM
             'end_time': end_time.strftime('%H:%M'),
-            'total_customers': booking.number_of_guests
-        })    
+            'total_customers': booking.number_of_guests,
+            'table': booking.table.table_number,
+            'booking_code': booking.booking_code,
+            'booking_phone': booking.customer.phone,
+            'number_of_guests': booking.number_of_guests,
+            'booking_name': booking.customer.user.fullname
+        })
 
     # Generate a list of available time slots based on total people
     available_time_slots = []
     current_time = datetime(booking_date.year, booking_date.month, booking_date.day, 8, 0)  # Assuming restaurant opens at 8:00 AM
     closing_time = datetime(booking_date.year, booking_date.month, booking_date.day, 22, 0)  # Assuming restaurant closes at 10:00 PM
 
+    table_codes_with_id = []
     while current_time < closing_time:
         slot_start_time = current_time
         slot_end_time = current_time + timedelta(minutes=60)  # Assuming each slot is 60 minutes
@@ -274,25 +282,64 @@ def admin_profile(request):
             slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']
             for slot in booked_time_slots
         )
+
         
+        table_booked = [slot['table'] for slot in booked_time_slots if
+                        slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]
+        table_codes = [slot['booking_code'] for slot in booked_time_slots if
+                       slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]
+        table_book_phones = [slot['booking_phone'] for slot in booked_time_slots if
+                             slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]
+        table_book_total_guests = [slot['number_of_guests'] for slot in booked_time_slots if
+                                   slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]
+
+        table_book_phones_list = []
+        for phone in table_book_phones:
+            if phone not in table_book_phones_list:
+                table_book_phones_list.append(phone)
+
+        if len(table_book_phones_list) == 0:
+            table_book_phones_result = "None"
+        elif len(table_book_phones_list) > 1:
+            table_book_phones_result = table_book_phones_list[0] + ", " + table_book_phones_list[1]
+        else:
+            table_book_phones_result = table_book_phones_list[0]
+
+        table_book_total_guests_list = []
+        for guests in table_book_total_guests:
+            if guests not in table_book_total_guests_list:
+                table_book_total_guests_list.append(guests)
+        
+        if len(table_book_total_guests_list) == 0:
+            table_book_total_guests_result = "None"
+        elif len(table_book_total_guests_list) > 1:
+            table_book_total_guests_result = table_book_total_guests_list[0] + ", " + table_book_total_guests_list[1]
+        else:
+            table_book_total_guests_result = table_book_total_guests_list[0]
+                    
         if not slot_already_booked:
             available_time_slots.append({
                 'start_time': slot_start_time.strftime('%H:%M'),
                 'end_time': slot_end_time.strftime('%H:%M'),
-                'flag': 'not-booked'
+                'flag': 'not-booked',
+                'booking_phone': slot_start_time.strftime('%H:%M')
             })
         else:
             available_time_slots.append({
                 'start_time': slot_start_time.strftime('%H:%M'),
                 'end_time': slot_end_time.strftime('%H:%M'),
-                'flag': 'booked'
+                'flag': 'booked',
+                'table': table_booked,
+                'booking_code': table_codes,
+                'booking_phone':table_book_phones_result,
+                'number_of_guests': table_book_total_guests_result
             })
 
         current_time += timedelta(minutes=60)  # Assuming each slot is 60 minutes
 
     tables = MyTable.objects.all()
 
-    return render(request, 'account/profile.html', {'available_time_slots': available_time_slots, 'tables': tables, 'date': date})
+    return render(request, 'account/profile.html', {'available_time_slots': available_time_slots, 'tables': tables, 'date': date, 'booked_tables': booked_tables})
 
 # Test
 def create_test_user(request):
