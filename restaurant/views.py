@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from .models import Restaurant, Food, Booking, MyTable, User, Customer
+from .models import Restaurant, Food, Booking, MyTable, User, Customer, Category
 from django.conf import settings
 from django.views.decorators.http import require_GET, require_POST
 from datetime import datetime, timedelta
@@ -349,6 +349,31 @@ def admin_profile(request):
     tables = MyTable.objects.all()
 
     return render(request, 'account/profile.html', {'available_time_slots': available_time_slots, 'tables': tables, 'date': date, 'booked_tables': booked_tables})
+
+@login_required
+def admin_setting(request):
+    restaurant = Restaurant.objects.first()
+    if request.method == 'POST':                
+        restaurant.name = request.POST.get('name')
+        restaurant.address = request.POST.get('address')
+        restaurant.phone = request.POST.get('phone')
+        restaurant.email = request.POST.get('email')
+        restaurant.description = request.POST.get('description')
+        restaurant.opening_hours = request.POST.get('opening_hours')
+        restaurant.save()
+    return render(request, 'account/setting.html', {'restaurant': restaurant})
+
+@login_required
+def admin_gallery(request):
+    return render(request, 'account/gallery.html')
+
+@login_required
+def admin_menu(request):
+    return render(request, 'account/menu.html')
+
+@login_required
+def admin_page(request):
+    return render(request, 'account/page.html')    
 
 # Test
 def create_test_user(request):

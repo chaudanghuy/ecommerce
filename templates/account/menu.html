@@ -1,0 +1,68 @@
+<!-- profile.html -->
+{% extends 'generic.html' %}
+
+{% load custom_filters %}
+
+{% block title %}Booking Management{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4"><i class="fas fa-utensils"></i> Menu Management</h1>
+
+    <!-- Category Filter -->
+    <div class="form-group">
+        <label for="categorySelect">Filter by Category:</label>
+        <select class="form-control" id="categorySelect">
+            <option value="">All Categories</option>
+            <option value="appetizers">Appetizers</option>
+            <option value="main_courses">Main Courses</option>
+            <option value="desserts">Desserts</option>
+            <!-- Add more categories as needed -->
+        </select>
+    </div>
+
+    <!-- Food List -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Food List
+        </div>
+        <div class="card-body">
+            <!-- List of foods -->
+            <ul class="list-group">
+                <li class="list-group-item">Food 1 <a href="#">Edit</a></li>
+                <li class="list-group-item">Food 2 <a href="#">Edit</a></li>
+                <li class="list-group-item">Food 3 <a href="#">Edit</a></li>
+                <!-- Add more foods as needed -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Create New Food -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Create New Food
+        </div>
+        <div class="card-body">
+            <form>
+                <!-- Food Name -->
+                <div class="form-group">
+                    <label for="foodName">Name:</label>
+                    <input type="text" class="form-control" id="foodName" placeholder="Enter name">
+                </div>
+                <!-- Food Description -->
+                <div class="form-group">
+                    <label for="foodDescription">Description:</label>
+                    <textarea class="form-control" id="foodDescription" rows="3" placeholder="Enter description"></textarea>
+                </div>
+                <!-- Food Price -->
+                <div class="form-group">
+                    <label for="foodPrice">Price:</label>
+                    <input type="text" class="form-control" id="foodPrice" placeholder="Enter price">
+                </div>
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

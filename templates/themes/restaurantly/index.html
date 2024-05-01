@@ -219,7 +219,7 @@
             <div class="tab-pane" id="tab-4">
               <div class="row">
                 <div class="col-lg-8 details order-2 order-lg-1">
-                  <h3>🍨 Che Ba Mau</h3>
+                  <h3>🍨 Che Thai</h3>
                   <p class="fst-italic">A delightful trio of layered dessert featuring sweet beans, coconut milk,
                     pandan jelly, and topped with crushed ice</p>
                   <p>Indulge in our Happy Hour specials from 5 PM to 7 PM, featuring discounted Vietnamese-inspired
@@ -582,7 +582,7 @@
 
         <div class="col-lg-8 mt-5 mt-lg-0">
 
-          <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+          <form action="#" role="form" class="php-email-form">
             <div class="row">
               <div class="col-md-6 form-group">
                 <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
@@ -595,14 +595,14 @@
               <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
             </div>
             <div class="form-group mt-3">
-              <textarea class="form-control" name="message" rows="8" placeholder="Message" required></textarea>
+              <textarea id="message" class="form-control" name="message" rows="8" placeholder="Message" required></textarea>
             </div>
             <div class="my-3">
               <div class="loading">Loading</div>
               <div class="error-message"></div>
               <div class="sent-message">Your message has been sent. Thank you!</div>
             </div>
-            <div class="text-center"><button type="submit">Send Message</button></div>
+            <div class="text-center"><button id="sendMessage" type="submit">Send Message</button></div>
           </form>
 
         </div>

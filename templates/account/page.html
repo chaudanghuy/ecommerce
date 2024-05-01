@@ -1,0 +1,45 @@
+<!-- profile.html -->
+{% extends 'generic.html' %}
+
+{% load custom_filters %}
+
+{% block title %}Booking Management{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Edit Content</h1>
+
+    <!-- Header Content -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Edit Header Content
+        </div>
+        <div class="card-body">
+            <textarea class="form-control" id="headerContent" rows="5" placeholder="Enter header content"></textarea>
+        </div>
+    </div>
+
+    <!-- Body Content -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Edit Body Content
+        </div>
+        <div class="card-body">
+            <textarea class="form-control" id="bodyContent" rows="5" placeholder="Enter body content"></textarea>
+        </div>
+    </div>
+
+    <!-- Footer Content -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Edit Footer Content
+        </div>
+        <div class="card-body">
+            <textarea class="form-control" id="footerContent" rows="5" placeholder="Enter footer content"></textarea>
+        </div>
+    </div>
+
+    <!-- Save Button -->
+    <button type="button" class="btn btn-primary">Save Content</button>
+</div>
+{% endblock %}
