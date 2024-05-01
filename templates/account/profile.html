@@ -25,7 +25,7 @@
                 Bookings
               </div>
               <div class="card-body">
-                <table id="booking-table" class="table table-hover table-bordered table-responsive">
+                <table id="booking-table" class="table table-hover table-responsive">
                   <tr>
                     <th>
                       Table                       
@@ -36,7 +36,7 @@
                   </tr>
                   {% for table in tables %}
                   <tr>
-                    <td>Table {{ table.table_number }}</td>
+                    <td>T {{ table.table_number }}</td>
                     {% for booking_time in available_time_slots %}
                       <td style="background-color: {% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}powderblue;{% endif %}" 
                           data-booking-id=
