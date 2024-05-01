@@ -160,6 +160,7 @@ def check_available_time_slots(request):
 
 # Web 
 @require_POST
+@csrf_exempt
 def book(request):
     if request.method == 'POST':
         data = request.POST 
