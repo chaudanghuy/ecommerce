@@ -24,8 +24,7 @@ urlpatterns = [
     
     # Test
     path('create-test-user', tests.create_test_user, name='create-test-user'),
-    path('test-email', tests.test_send_mail, name='test-email'),
-    path('test_calendar', tests.test_calender, name='test_calendar'),
+    path('test-email', tests.test_send_mail, name='test-email'),    
     
     # accounts
     path('accounts/', include('django.contrib.auth.urls')),
@@ -34,4 +33,8 @@ urlpatterns = [
     path('accounts/gallery', views.admin_gallery, name='gallery'),
     path('accounts/menu', views.admin_menu, name='menu'),
     path('accounts/pages', views.admin_page, name='page'),
+    
+    path('accounts/edit-food', apis.edit_food, name='edit-food'),
+    
+    # path('delete-booking/<str:booking_id>', views.delete_booking, name='delete-booking'),
 ]

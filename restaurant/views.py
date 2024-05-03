@@ -13,6 +13,9 @@ import json
 import uuid
 from django.contrib import messages
 import requests
+from . import helpers
+from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Frontend
 def index(request):
@@ -20,7 +23,7 @@ def index(request):
 
 def customer_index(request):
     restaurant = Restaurant.objects.all()[0]
-    foods = Food.objects.all()
+    foods = Food.objects.filter(availability='available')  # Filter for availability only
     return render(request, 'themes/'+settings.THEME+'/index.html', {'foods': foods, 'restaurant': restaurant})
 
 def customer_book(request):
@@ -41,6 +44,7 @@ def customer_book_process(request):
         booking_date = data.get('booking_date')
         booking_time = data.get('booking_time')
         total_customer = int(data.get('total_customer'))
+        special_request = data.get('special_requests')
         duration = 90 if total_customer <= 3 else (120 if total_customer <= 6 else 150)
         tables_required = total_customer // 7 + (1 if total_customer % 7 != 0 else 0)
         
@@ -92,6 +96,11 @@ def customer_book_process(request):
                 email=data.get('email'),
                 password='123'
             )                   
+        else:
+            current_user.fullname = data.get('fullname')
+            current_user.username = data.get('email')
+            current_user.email = data.get('email')
+            current_user.save()
         
         customer = Customer.objects.filter(user=current_user).first() 
         if customer is None:
@@ -99,7 +108,11 @@ def customer_book_process(request):
                 user=current_user,
                 address=data.get('email'),
                 phone=data.get('phone')
-            )        
+            )
+        else:
+            customer.address = data.get('email')
+            customer.phone = data.get('phone')
+            customer.save()        
         
         booking_code = uuid.uuid4()
         for i in range(tables_required):
@@ -114,7 +127,10 @@ def customer_book_process(request):
                 number_of_guests=total_customer,
                 special_requests=data.get('special_requests'),
             ) 
-                                               
+    
+    restaurant = Restaurant.objects.all()[0]
+    # Call Calender API
+    helpers.book_calender_api(booking_date, booking_time, duration, data.get('fullname'), data.get('phone'), total_customer, restaurant.address, special_request)
     return HttpResponse('Your booking request was sent. We will call back or send an Email to confirm your reservation. Thank you!', status=201)
 
 # Admin
@@ -165,7 +181,7 @@ def admin_profile(request):
 
     # Generate a list of available time slots based on total people
     available_time_slots = []
-    current_time = datetime(booking_date.year, booking_date.month, booking_date.day, 10, 0)  # Assuming restaurant opens at 8:00 AM
+    current_time = datetime(booking_date.year, booking_date.month, booking_date.day, 17, 0)  # Assuming restaurant opens at 17:00 PM
     closing_time = datetime(booking_date.year, booking_date.month, booking_date.day, 22, 0)  # Assuming restaurant closes at 10:00 PM
 
     table_codes_with_id = []
@@ -214,8 +230,10 @@ def admin_profile(request):
         current_time += timedelta(minutes=15)  # Assuming each slot is 60 minutes
 
     tables = MyTable.objects.all()
+    
+    booking_lists = Booking.objects.order_by('-id')
 
-    return render(request, 'account/profile.html', {'available_time_slots': available_time_slots, 'tables': tables, 'date': date, 'booked_tables': booked_tables})
+    return render(request, 'account/profile.html', {'available_time_slots': available_time_slots, 'tables': tables, 'date': date, 'booked_tables': booked_tables, 'booking_lists': booking_lists})
 
 @login_required
 def admin_setting(request):
@@ -236,8 +254,49 @@ def admin_gallery(request):
 
 @login_required
 def admin_menu(request):
-    return render(request, 'account/menu.html')
+    category_id = request.GET.get('cate')            
+    
+    if (category_id and category_id != 'all'):
+        # Store the category in session
+        request.session['category'] = category_id
+        category = Category.objects.get(id=category_id)            
+        foods = Food.objects.filter(category=category)
+    else:
+        category = None
+        # Check if category is in session
+        category_id = request.session.get('category')
+        category = Category.objects.get(id=category_id)            
+        if category:
+            foods = Food.objects.filter(category=category)
+        else:
+            foods = Food.objects.order_by('-id')     
+            
+    categories = Category.objects.all()        
+    
+    food_id = request.GET.get('food_id')
+    if (food_id):
+        food = Food.objects.get(id=food_id)
+    else:
+        food = None
+    
+    paginator = Paginator(foods, 10)
+    
+    page = request.GET.get('page', 1)    
+    
+    try:
+        objects = paginator.page(page)        
+    except PageNotAnInteger:
+        objects = paginator.page(1)
+    except EmptyPage:
+        objects = paginator.page(paginator.num_pages) 
+    return render(request, 'account/menu.html', {'categories': categories, 'foods': objects, 'category': category, 'food': food})
 
 @login_required
 def admin_page(request):
     return render(request, 'account/page.html')    
+
+@csrf_exempt
+def delete_booking(request, booking_id):
+    booking = Booking.objects.get(id=booking_id)
+    booking.delete()
+    return JsonResponse({'message': 'Booking deleted successfully!'})

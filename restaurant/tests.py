@@ -26,7 +26,3 @@ def test_send_mail(request):
     client = mt.MailtrapClient(token="d7d15387969eea4fe05e178fda8a7614")
     client.send(mail)
     return HttpResponse("Email sent.")
-
-def test_calender(request):
-    helpers.book_calender_api(request.GET.get('date'), request.GET.get('time'))
-    return HttpResponse("Calendar created.")

@@ -61,6 +61,7 @@ h1, h2, h3, h4, h5, h6 {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -70,6 +71,7 @@ h1, h2, h3, h4, h5, h6 {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -158,11 +160,11 @@ h1, h2, h3, h4, h5, h6 {
   color: white;
 }
 
-#topbar .languages ul li + li {
+#topbar .languages ul li+li {
   padding-left: 10px;
 }
 
-#topbar .languages ul li + li::before {
+#topbar .languages ul li+li::before {
   display: inline-block;
   padding-right: 10px;
   color: rgba(255, 255, 255, 0.5);
@@ -202,7 +204,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff;
 }
 
-#header .logo img {    
+#header .logo img {
   max-height: 40px;
 }
 
@@ -273,7 +275,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-left: 5px;
 }
 
-.navbar a:hover, .navbar .active, .navbar li:hover > a {
+.navbar a:hover, .navbar .active, .navbar li:hover>a {
   color: #d9ba85;
 }
 
@@ -306,11 +308,11 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 12px;
 }
 
-.navbar .dropdown ul a:hover, .navbar .dropdown ul .active:hover, .navbar .dropdown ul li:hover > a {
+.navbar .dropdown ul a:hover, .navbar .dropdown ul .active:hover, .navbar .dropdown ul li:hover>a {
   color: #cda45e;
 }
 
-.navbar .dropdown:hover > ul {
+.navbar .dropdown:hover>ul {
   opacity: 1;
   top: 100%;
   visibility: visible;
@@ -322,7 +324,7 @@ h1, h2, h3, h4, h5, h6 {
   visibility: hidden;
 }
 
-.navbar .dropdown .dropdown:hover > ul {
+.navbar .dropdown .dropdown:hover>ul {
   opacity: 1;
   top: 0;
   left: 100%;
@@ -333,7 +335,8 @@ h1, h2, h3, h4, h5, h6 {
   .navbar .dropdown .dropdown ul {
     left: -90%;
   }
-  .navbar .dropdown .dropdown:hover > ul {
+
+  .navbar .dropdown .dropdown:hover>ul {
     left: -100%;
   }
 }
@@ -354,6 +357,7 @@ h1, h2, h3, h4, h5, h6 {
   .mobile-nav-toggle {
     display: block;
   }
+
   .navbar ul {
     display: none;
   }
@@ -397,7 +401,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #1a1814;
 }
 
-.navbar-mobile a:hover, .navbar-mobile .active, .navbar-mobile li:hover > a {
+.navbar-mobile a:hover, .navbar-mobile .active, .navbar-mobile li:hover>a {
   color: #cda45e;
 }
 
@@ -429,11 +433,11 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 12px;
 }
 
-.navbar-mobile .dropdown ul a:hover, .navbar-mobile .dropdown ul .active:hover, .navbar-mobile .dropdown ul li:hover > a {
+.navbar-mobile .dropdown ul a:hover, .navbar-mobile .dropdown ul .active:hover, .navbar-mobile .dropdown ul li:hover>a {
   color: #cda45e;
 }
 
-.navbar-mobile .dropdown > .dropdown-active {
+.navbar-mobile .dropdown>.dropdown-active {
   display: block;
 }
 
@@ -603,6 +607,7 @@ h1, h2, h3, h4, h5, h6 {
   #hero {
     height: auto;
   }
+
   #hero .container {
     padding-top: 130px;
     padding-bottom: 60px;
@@ -614,6 +619,7 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 28px;
     line-height: 36px;
   }
+
   #hero h2 {
     font-size: 18px;
     line-height: 24px;
@@ -625,6 +631,7 @@ h1, h2, h3, h4, h5, h6 {
     transform: scale(0.6, 0.6);
     opacity: 1;
   }
+
   100% {
     transform: scale(1, 1);
     opacity: 0;
@@ -636,6 +643,7 @@ h1, h2, h3, h4, h5, h6 {
     transform: scale(0.6, 0.6);
     opacity: 1;
   }
+
   100% {
     transform: scale(1, 1);
     opacity: 0;
@@ -717,11 +725,11 @@ section {
   font-size: 14px;
 }
 
-.breadcrumbs ol li + li {
+.breadcrumbs ol li+li {
   padding-left: 10px;
 }
 
-.breadcrumbs ol li + li::before {
+.breadcrumbs ol li+li::before {
   display: inline-block;
   padding-right: 10px;
   color: #37332a;
@@ -732,9 +740,11 @@ section {
   .breadcrumbs .d-flex {
     display: block !important;
   }
+
   .breadcrumbs ol {
     display: block;
   }
+
   .breadcrumbs ol li {
     display: inline-block;
   }
@@ -938,8 +948,8 @@ section {
 
 .menu .menu-content::after {
   content: "......................................................................"
- "...................................................................."
- "....................................................................";
+    "...................................................................."
+    "....................................................................";
   position: absolute;
   left: 20px;
   right: 0;
@@ -1159,13 +1169,13 @@ section {
 .book-a-table .php-email-form .error-message {
   display: none;
   color: #fff;
-  background: #cda45e;
+  background: red;
   text-align: left;
   padding: 15px;
   font-weight: 600;
 }
 
-.book-a-table .php-email-form .error-message br + br {
+.book-a-table .php-email-form .error-message br+br {
   margin-top: 25px;
 }
 
@@ -1562,6 +1572,7 @@ section {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -1571,6 +1582,7 @@ section {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }

@@ -3,66 +3,182 @@
 
 {% load custom_filters %}
 
-{% block title %}Booking Management{% endblock %}
+{% block title %}
+  Menu Management
+{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="mb-4"><i class="fas fa-utensils"></i> Menu Management</h1>
+  <div class="container mt-5">
+    <h1 class="mb-4"><i class="fas fa-utensils"></i> 
+      Menu Management
+      <a href="/accounts/menu" class="float-end btn btn-primary">Create New Food</a>
+    </h1>    
 
     <!-- Category Filter -->
     <div class="form-group">
-        <label for="categorySelect">Filter by Category:</label>
-        <select class="form-control" id="categorySelect">
-            <option value="">All Categories</option>
-            <option value="appetizers">Appetizers</option>
-            <option value="main_courses">Main Courses</option>
-            <option value="desserts">Desserts</option>
-            <!-- Add more categories as needed -->
-        </select>
+      <label for="categorySelect">Filter by Category:</label>
+      <select class="form-control" id="categorySelect">
+        <option value="all">All Categories</option>        
+        {% for cate in categories %}
+          <option value="{{ cate.id }}" {% if category and category.id == cate.id %}selected{% endif %}>
+            {{ cate.name }}
+          </option>
+        {% endfor %}
+        <!-- Add more categories as needed -->
+      </select>
     </div>
 
     <!-- Food List -->
     <div class="card mb-4">
-        <div class="card-header">
-            Food List
-        </div>
-        <div class="card-body">
-            <!-- List of foods -->
-            <ul class="list-group">
-                <li class="list-group-item">Food 1 <a href="#">Edit</a></li>
-                <li class="list-group-item">Food 2 <a href="#">Edit</a></li>
-                <li class="list-group-item">Food 3 <a href="#">Edit</a></li>
-                <!-- Add more foods as needed -->
+      <div class="card-header">Food List</div>
+      <div class="card-body">
+        <!-- List of foods -->
+        <ul class="list-group">
+          {% for food in foods %}
+            <li class="list-group-item">
+              {{ food.name }} 
+              <a href="/accounts/menu?food_id={{food.id}}">Edit</a>
+            </li>
+          {% endfor %}
+          <!-- Add more foods as needed -->
+          <nav class="d-flex justify-content-center mt-3" aria-label="Page navigation example">
+            <ul class="pagination">
+              {% if foods.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page=1">&laquo; first</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ foods.previous_page_number }}">previous</a>
+                </li>
+              {% endif %}
+
+              <li class="page-item active" aria-current="page">
+                <a class="page-link" href="#">Page {{ foods.number }}</a>
+              </li>
+
+              {% if foods.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ foods.next_page_number }}">next</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ foods.paginator.num_pages }}">last &raquo;</a>
+                </li>
+              {% endif %}
             </ul>
-        </div>
+          </nav>
+        </ul>
+      </div>
     </div>
 
     <!-- Create New Food -->
-    <div class="card mb-4">
-        <div class="card-header">
-            Create New Food
-        </div>
+    {% if food %}
+      <div class="card mb-4">
+        <div class="card-header">Edit Food</div>
         <div class="card-body">
-            <form>
-                <!-- Food Name -->
-                <div class="form-group">
-                    <label for="foodName">Name:</label>
-                    <input type="text" class="form-control" id="foodName" placeholder="Enter name">
-                </div>
-                <!-- Food Description -->
-                <div class="form-group">
-                    <label for="foodDescription">Description:</label>
-                    <textarea class="form-control" id="foodDescription" rows="3" placeholder="Enter description"></textarea>
-                </div>
-                <!-- Food Price -->
-                <div class="form-group">
-                    <label for="foodPrice">Price:</label>
-                    <input type="text" class="form-control" id="foodPrice" placeholder="Enter price">
-                </div>
-                <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary">Create</button>
-            </form>
+          <form>
+            <input type="hidden" name="food_id" id="food_id" value="{{food.id}}">
+            <!-- Food Name -->
+            <div class="form-group">
+              <label for="foodDescription">Food:</label>
+              <input type="text" id="name" name="name" class="form-control" id="foodPrice" placeholder="Food" value="{{ food.name }}"/>
+            </div>
+            <!-- Food Image -->
+            <div class="form-group">
+              <label for="foodImage">Image:</label>
+              <input type="file" id="food-edit-upload" name="image" class="form-control" accept="image/*" />
+              <img style="width: 200px;" id="food-edit-image" src="{{ food.image.url }}" alt="{{ food.name }}" class="img-thumbnail mt-2" />
+            </div>            
+            <!-- Food Category -->
+            <div class="form-group">
+              <label for="foodName">Category:</label>
+              <select class="form-control" id="category" name="category">                 
+                {% for cate in categories %}
+                  <option value="{{ cate.id }}" {% if food and food.category.id == cate.id %}selected{% endif %}>
+                    {{ cate.name }}
+                  </option>
+                {% endfor %}
+                <!-- Add more categories as needed -->
+              </select>
+            </div>
+            <!-- Food Description -->
+            <div class="form-group">
+              <label for="foodDescription">Description:</label>
+              <textarea name="description" class="form-control" id="foodDescription" rows="5" placeholder="Enter description">{{food.description}}</textarea>
+            </div>
+            <!-- Food Price -->
+            <div class="form-group">
+              <label for="foodPrice">Price:</label>
+              <input name="price" type="text" class="form-control" id="foodPrice" placeholder="Enter price" value="{{food.price}}"/>
+            </div>
+            <!-- Food availability -->
+            <div class="form-group">
+            <!-- Food Availability -->
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input" id="is_availabe" name="is_available" value="true"
+                  {% if food and food.availability == 'available' %}checked{% endif %}>
+              <label class="form-check-label" for="is_availabe">Is Available?</label>
+            </div>
+            <!-- Submit Button -->
+            <div class="d-grid">
+              <button id="edit-food-btn" type="button" class="btn btn-primary">Update</button>
+            </div>
+          </form>
         </div>
-    </div>
-</div>
+      </div>
+    {% else %}
+      <div class="card mb-4">
+        <div class="card-header">Create New Food</div>
+        <div class="card-body">
+          <form>
+            <input type="hidden" name="food_id" id="food_id" value="{{food.id}}">
+            <!-- Food Name -->
+            <div class="form-group">
+              <label for="foodDescription">Food:</label>
+              <input type="text" id="name" name="name" class="form-control" id="foodPrice" placeholder="Food" value=""/>
+            </div>
+            <!-- Food Image -->
+            <div class="form-group">
+              <label for="foodImage">Image:</label>
+              <input type="file" id="food-edit-upload" name="image" class="form-control" accept="image/*" />
+              <img style="width: 200px;" id="food-edit-image" src="" alt="" class="img-thumbnail mt-2" />
+            </div>            
+            <!-- Food Category -->
+            <div class="form-group">
+              <label for="foodName">Category:</label>
+              <select class="form-control" id="category" name="category">                 
+                {% for cate in categories %}
+                  <option value="{{ cate.id }}">
+                    {{ cate.name }}
+                  </option>
+                {% endfor %}
+                <!-- Add more categories as needed -->
+              </select>
+            </div>
+            <!-- Food Description -->
+            <div class="form-group">
+              <label for="foodDescription">Description:</label>
+              <textarea name="description" class="form-control" id="foodDescription" rows="5" placeholder="Enter description"></textarea>
+            </div>
+            <!-- Food Price -->
+            <div class="form-group">
+              <label for="foodPrice">Price:</label>
+              <input name="price" type="text" class="form-control" id="foodPrice" placeholder="Enter price" value=""/>
+            </div>
+            <!-- Food availability -->
+            <div class="form-group">
+            <!-- Food Availability -->
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input" id="is_availabe" name="is_available" value="true">
+              <label class="form-check-label" for="is_availabe">Is Available?</label>
+            </div>
+            <!-- Submit Button -->
+            <div class="d-grid">
+              <button id="add-food-btn" type="button" class="btn btn-primary">Update</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
 {% endblock %}

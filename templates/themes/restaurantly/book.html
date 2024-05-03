@@ -33,7 +33,7 @@
                 <div class="g-recaptcha" data-sitekey="{{ captcha_key }}"></div>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 form-group">
-                        <input type="text" name="fullname" class="form-control" id="name" placeholder="Your Name"
+                        <input type="text" name="fullname" class="form-control" id="fullname" placeholder="Your Name"
                             data-rule="minlen:4" data-msg="Please enter at least 4 chars" required> 
                         <div class="validate"></div>
                     </div>
@@ -72,11 +72,38 @@
                         confirm your
                         reservation. Thank you!</div>
                 </div>
-                <div class="text-center"><button id="booking-btn" type="submit">Book a Table</button></div>
+                <div class="text-center"><button class="btn btn-lg btn-danger" id="booking-btn" type="button">Book a Table</button></div>
             </form>
         </div>
     </section>
     <!-- End Book A Table Section -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="reservationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header p-3 mb-2 bg-primary text-white">
+            <h5 class="modal-title" id="exampleModalLabel">Reservation Condition</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card text-white bg-secondary mb-3">
+                    <div class="card-body">
+                        <h5>Agreement to vacate required</h5>
+                        <p>
+                            Please note, your table is required back by <span id="checking-booking-hour"></span>. Please check the confirmation email for more detail. If you require the table for longer then please call the restaurant to see if we can extend this for you.
+                        </p>                        
+                    </div>  
+                    <strong>Please confirm that you agree to these conditions</strong>
+                </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Agree</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+        </div>
+    </div>    
 
 </main><!-- End #main -->
 {% endblock content %}
