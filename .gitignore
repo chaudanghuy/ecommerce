@@ -1,2 +1,4 @@
 /.env
 __pycache__
+# this token contains your sensitive google service account info
+google-credentials.json

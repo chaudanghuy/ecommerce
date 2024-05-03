@@ -2,13 +2,15 @@ from django.urls import path, include
 from django.contrib.auth.views import LogoutView
 
 from . import views
+from . import apis
+from . import tests
 from django.views.generic.base import RedirectView
 
 urlpatterns = [
     # Customer
     path('', views.customer_index, name='home'),
     path('book', views.customer_book, name='book'),
-    path('book-table', views.book, name='book-table'),
+    path('book-table', views.customer_book_process, name='book-table'),
     path('gallery', views.customer_gallery, name='gallery'),    
 
     # Account
@@ -17,12 +19,13 @@ urlpatterns = [
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
     
     # Api
-    path('api/check-available-time-slots', views.check_available_time_slots, name='check-available-time-slots'),
-    path('api/book-table', views.book_table, name='book-api'),
+    path('api/check-available-time-slots', apis.check_available_time_slots, name='check-available-time-slots'),
+    path('api/book-table', apis.book_table, name='book-api'),
     
     # Test
-    path('create-test-user', views.create_test_user, name='create-test-user'),
-    path('test-email', views.test_send_mail, name='test-email'),
+    path('create-test-user', tests.create_test_user, name='create-test-user'),
+    path('test-email', tests.test_send_mail, name='test-email'),
+    path('test_calendar', tests.test_calender, name='test_calendar'),
     
     # accounts
     path('accounts/', include('django.contrib.auth.urls')),
