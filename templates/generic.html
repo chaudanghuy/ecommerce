@@ -1,231 +1,38 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      {% block title %}
+<html>
 
-      {% endblock %}
-    </title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Font Awesome CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
-    <!-- Link Bootstrap Datepicker CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
-    <!-- Your custom CSS (if any) -->
-    <link href="{% static '/generic/css/custom.css' %}" rel="stylesheet" />
-    <link href="{% static '/demo1/assets/img/favicon.ico' %}" rel="icon" />
-  </head>
+<head>
+  <!-- Basic Page Info -->
+  <meta charset="utf-8">
+  <title>
+    {% block title %}{% endblock title %}
+  </title>
 
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a class="navbar-brand" href="#">Viet-An Restaurant</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+  <!-- Site favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static '/demo1/assets/img/favicon.ico' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static '/demo1/assets/img/favicon.ico' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static '/demo1/assets/img/favicon.ico' %}">
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/accounts/profile">Bookings</a>
-          </li>
-          <!--                                    <li class="nav-item">
-                    <a class="nav-link" href="/accounts/pages">Pages</a>
-                </li>                                               -->
-          <li class="nav-item">
-            <a class="nav-link" href="/accounts/menu">Menu</a>
-          </li>
-          <!--                                    <li class="nav-item">
-                    <a class="nav-link" href="/accounts/gallery">Gallery</a>
-                </li>                                                    -->
-          <li class="nav-item">
-            <a class="nav-link" href="/accounts/settings">Settings</a>
-          </li>
-          <!-- Add more navigation links here -->
-        </ul>
-        <!-- Add user authentication related links here -->
-      </div>
-    </nav>
+  <!-- Mobile Specific Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <div class="container mt-4">
-      {% block content %}
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="{% static '/admin/vendors/styles/core.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static '/admin/vendors/styles/icon-font.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static '/admin/vendors/styles/style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static '/admin/src/plugins/fullcalendar/fullcalendar.css' %}">
 
-      {% endblock %}
-    </div>
+  <!-- Global site tag (gtag.js) - Google Analytics -->  
+</head>
 
-    <!-- Bootstrap Icons -->
-    <script src="https://unpkg.com/bootstrap-icons"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script>
-      $(document).ready(function () {
-        $('#datepicker').datepicker({
-          format: 'yyyy-mm-dd',
-          defaultDate: new Date(),
-          autoclose: true
-        })
-      
-        // Function to delete a booking
-        $('.deleteBooking').click(function () {
-          let bookingId = $(this).attr('data-booking-id')
-          alert($(this).attr('data-booking-id'))
-          $.ajax({
-            url: '/delete-booking/' + bookingId, // Replace with your Django backend endpoint
-            type: 'DELETE',
-            success: function (response) {
-              console.log(response) // Log the response from the server
-              // If deletion is successful, remove the corresponding row from the table
-              $('#bookingRow_' + bookingId).remove()
-            },
-            error: function (xhr, status, error) {
-              console.error(xhr.responseText) // Log any errors to the console
-              // Handle error accordingly (e.g., display error message to the user)
-            }
-          })
-        })
-      
-        // Select category
-        $('#categorySelect').on('change', function () {
-          window.location.href = '/accounts/menu?cate=' + $(this).val()
-        })
-      
-        // Preview image on file select
-        $('#food-edit-upload').on('change', function () {
-          if (this.files && this.files[0]) {
-            var reader = new FileReader()
-      
-            reader.onload = function (e) {
-              $('#food-edit-image').attr('src', e.target.result)
-            }
-      
-            reader.readAsDataURL(this.files[0])
-          }
-        })
-      
-        // Clicking edit-food-btn will send POST request to edit food with image, name, price
-        $('#edit-food-btn').click(function () {
-          let formData = new FormData()
-          let imageFile = $('#food-edit-upload')[0].files[0]
-          let name = $('#name').val()
-          let price = $('input[name="price"]').val()
-          let category = $('#category').val()
-          let description = $('#foodDescription').val()
-          let is_available = $('#is_availabe').is(':checked') ? 'true' : 'false'
-          let food_id = $('#food_id').val()
-      
-          if (imageFile) {
-            formData.append('image', imageFile)
-          }
-          formData.append('food_id', food_id)
-          formData.append('name', name)
-          formData.append('price', price)
-          formData.append('category', category)
-          formData.append('description', description)
-          formData.append('is_available', is_available)
-      
-          $.ajax({
-            url: '/accounts/edit-food', // Replace with your Django backend endpoint
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-              window.location.href = '/accounts/menu?food_id=' + food_id
-            },
-            error: function (xhr, status, error) {
-              console.error(xhr.responseText) // Log any errors to the console
-              // Handle error accordingly (e.g., display error message to the user)
-            }
-          })
-        })
-      
-        $('#add-food-btn').click(function () {
-          let formData = new FormData()
-          let imageFile = $('#food-edit-upload')[0].files[0]
-          let name = $('#name').val()
-          let price = $('input[name="price"]').val()
-          let category = $('#category').val()
-          let description = $('#foodDescription').val()
-          let is_available = $('#is_availabe').val()
-          let food_id = $('#food_id').val()
-      
-          if (imageFile) {
-            formData.append('image', imageFile)
-          }
-          formData.append('food_id', food_id)
-          formData.append('name', name)
-          formData.append('price', price)
-          formData.append('category', category)
-          formData.append('description', description)
-          formData.append('is_available', is_available)
-      
-          $.ajax({
-            url: '/accounts/edit-food', // Replace with your Django backend endpoint
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-              window.location.href = '/accounts/menu?food_id=' + food_id
-            },
-            error: function (xhr, status, error) {
-              console.error(xhr.responseText) // Log any errors to the console
-              // Handle error accordingly (e.g., display error message to the user)
-            }
-          })
-        })
-      })
-      
-      $('#find-bookings').on('click', function () {
-        var url = window.location.origin + '/accounts/profile?date=' + $('#datepicker').val()
-        window.location.href = url
-      })
-      
-      function mergeCells() {
-        $('#booking-table tr').each(function () {
-          var prevBookingId = null
-          var colspan = 1
-      
-          $('td', this).each(function () {
-            var bookingId = $(this).data('booking-id')
-      
-            if (bookingId === prevBookingId) {
-              colspan++
-              $(this)
-                .prevAll('[data-booking-id="' + bookingId + '"]')
-                .attr('colspan', colspan)
-                .addClass('merged-cell')
-              $(this).remove()
-            } else {
-              prevBookingId = bookingId
-              colspan = 1
-            }
-          })
-        })
-      }
-      
-      // Call the mergeCells function on page load
-      mergeCells()
-      
-      function copyText() {
-        // Get the text field
-        var copyText = document.getElementById('myInput')
-      
-        // Select the text field
-        copyText.select()
-        copyText.setSelectionRange(0, 99999) // For mobile devices
-      
-        // Copy the text inside the text field
-        navigator.clipboard.writeText(copyText.value)
-      
-        // Alert the copied text
-        alert('Copied the text: ' + copyText.value)
-      }
-    </script>
-  </body>
+
+{% block content %}
+  
+{% endblock content %}
+  
+
 </html>

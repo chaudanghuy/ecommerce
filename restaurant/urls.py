@@ -14,7 +14,7 @@ urlpatterns = [
     path('gallery', views.customer_gallery, name='gallery'),    
 
     # Account
-    path('manage', RedirectView.as_view(url='/accounts/login'), name='manage'),
+    path('admin/', RedirectView.as_view(url='/accounts/login'), name='manage'),
     path('accounts', RedirectView.as_view(url='/accounts/login'), name='login'),
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
     
@@ -29,6 +29,7 @@ urlpatterns = [
     # accounts
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/profile/', views.admin_profile, name='profile'),
+    path('accounts/calendar', views.admin_calendar, name='calendar'),
     path('accounts/settings/', views.admin_setting, name='setting'),
     path('accounts/gallery', views.admin_gallery, name='gallery'),
     path('accounts/menu', views.admin_menu, name='menu'),

@@ -135,7 +135,7 @@ def customer_book_process(request):
 
 # Admin
 @login_required
-def admin_profile(request):
+def admin_calendar(request):
     date = request.GET.get('date')
     
     try:
@@ -233,7 +233,10 @@ def admin_profile(request):
     
     booking_lists = Booking.objects.order_by('-id')
 
-    return render(request, 'account/profile.html', {'available_time_slots': available_time_slots, 'tables': tables, 'date': date, 'booked_tables': booked_tables, 'booking_lists': booking_lists})
+    return render(request, 'account/calendar.html', {'available_time_slots': available_time_slots, 'tables': tables, 'date': date, 'booked_tables': booked_tables, 'booking_lists': booking_lists})
+
+def admin_profile(request):
+    return render(request, 'account/profile.html')
 
 @login_required
 def admin_setting(request):
