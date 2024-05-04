@@ -31,15 +31,15 @@
           <li class="nav-item">
             <a class="nav-link" href="/accounts/profile">Bookings</a>
           </li>
-          <!--                                  <li class="nav-item">
+          <!--                                    <li class="nav-item">
                     <a class="nav-link" href="/accounts/pages">Pages</a>
-                </li>                                             -->
+                </li>                                               -->
           <li class="nav-item">
             <a class="nav-link" href="/accounts/menu">Menu</a>
           </li>
-          <!--                                  <li class="nav-item">
+          <!--                                    <li class="nav-item">
                     <a class="nav-link" href="/accounts/gallery">Gallery</a>
-                </li>                                                  -->
+                </li>                                                    -->
           <li class="nav-item">
             <a class="nav-link" href="/accounts/settings">Settings</a>
           </li>
@@ -115,7 +115,7 @@
           let price = $('input[name="price"]').val()
           let category = $('#category').val()
           let description = $('#foodDescription').val()
-          let is_available = $('#is_availabe').val()
+          let is_available = $('#is_availabe').is(':checked') ? 'true' : 'false'
           let food_id = $('#food_id').val()
       
           if (imageFile) {
