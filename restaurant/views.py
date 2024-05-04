@@ -265,9 +265,10 @@ def admin_menu(request):
         category = None
         # Check if category is in session
         category_id = request.session.get('category')
-        category = Category.objects.get(id=category_id)            
-        if category:
-            foods = Food.objects.filter(category=category)
+        if (category_id):
+            category = Category.objects.get(id=category_id)            
+            if category:
+                foods = Food.objects.filter(category=category)
         else:
             foods = Food.objects.order_by('-id')     
             
