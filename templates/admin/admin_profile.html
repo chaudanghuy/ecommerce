@@ -1,0 +1,101 @@
+<!-- Profile -->
+{% extends 'admin.html' %}
+
+{% load static %}
+
+{% block title %}
+  Restaurant Profile
+{% endblock %}
+
+{% block content %}  
+    {% include '../includes/admin/loader.html' %}
+
+    {% include '../includes/admin/header.html' with user=current_user %}
+
+    {% include '../includes/admin/layout_setting.html' %}
+
+    {% include '../includes/admin/sidebar.html' %}
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="main-container">
+      <div class="pd-ltr-20 xs-pd-20-10">
+        <div class="min-height-200px">
+          <div class="page-header">
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <div class="title">
+                  <h4>Form</h4>
+                </div>
+                <nav aria-label="breadcrumb" role="navigation">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                      <a href="{% url 'manage' %}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Restaurant Setting</li>
+                  </ol>
+                </nav>
+              </div>              
+            </div>
+          </div>
+          <!-- Default Basic Forms Start -->
+          <div class="pd-20 card-box mb-30">
+            <div class="clearfix">
+              <div class="pull-left">
+                <h4 class="text-blue h4">Restaurant Setting</h4>
+                <p class="mb-30">Restaurant Setting</p>
+              </div>
+            </div>
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="restaurant_id" value="{{ restaurant.id }}">
+              <div class="form-group row">
+                <label class="col-sm-12 col-md-2 col-form-label">Restaurant</label>
+                <div class="col-sm-12 col-md-10">
+                  <input class="form-control" type="text" name="name" id="name" value="{{restaurant.name}}" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-12 col-md-2 col-form-label">Address</label>
+                <div class="col-sm-12 col-md-10">
+                  <input name="address" id="address" class="form-control" placeholder="Restaurant Address" type="text" value="{{restaurant.address}}"/>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-12 col-md-2 col-form-label">Phone:</label>
+                <div class="col-sm-12 col-md-10">
+                  <input name="phone" id="phone" class="form-control" value="bootstrap@example.com" type="tel" value="{{restaurant.phone}}"/>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-12 col-md-2 col-form-label">Email</label>
+                <div class="col-sm-12 col-md-10">
+                  <input name="email" type="email" class="form-control" value="{{restaurant.email}}" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-12 col-md-2 col-form-label">Description</label>
+                <div class="col-sm-12 col-md-10">
+                  <textarea name="description" id="description" type="email"  class="form-control" type="text" rows="5">
+                    {{restaurant.description}}
+                  </textarea>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-12 col-md-2 col-form-label">Opening Hours</label>
+                <div class="col-sm-12 col-md-10">
+                  <input name="opening_hours" class="form-control" id="openingHours" value="{{restaurant.opening_hours}}" type="text" />
+                </div>
+              </div>                            
+              <div class="form-group row">
+                <div class="btn-list">
+								  <button type="submit" class="btn btn-primary btn-lg text-center">Save</button>
+                </div>
+							</div>
+            </form            
+          </div>
+          <!-- Default Basic Forms End -->
+        </div>
+        {% include '../includes/admin/footer.html' %}
+      </div>
+    </div>    
+{% endblock %}

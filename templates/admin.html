@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8" />
+    <title>
+      {% block title %}
+
+      {% endblock %}
+    </title>
+
+    <!-- Site favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static '/demo1/assets/img/favicon.ico' %}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static '/demo1/assets/img/favicon.ico' %}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static '/demo1/assets/img/favicon.ico' %}" />
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static '/admin/vendors/styles/core.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static '/admin/vendors/styles/icon-font.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static '/admin/vendors/styles/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static '/admin/src/plugins/fullcalendar/fullcalendar.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static '/admin/src/plugins/datatables/css/dataTables.bootstrap4.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static '/admin/src/plugins/datatables/css/responsive.bootstrap4.min.css' %}" />
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!-- Link Bootstrap Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+  </head>
+
+  <body>
+    {% block content %}
+
+    {% endblock %}
+    <!-- js -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="{% static '/admin/vendors/scripts/core.js' %}"></script>
+    <script src="{% static '/admin/vendors/scripts/script.min.js' %}"></script>
+    <script src="{% static '/admin/vendors/scripts/process.js' %}"></script>
+    <script src="{% static '/admin/vendors/scripts/layout-settings.js' %}"></script>
+    <script src="{% static '/admin/src/plugins/datatables/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static '/admin/src/plugins/datatables/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static '/admin/src/plugins/datatables/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static '/admin/src/plugins/datatables/js/responsive.bootstrap4.min.js' %}"></script>
+    <!-- buttons for Export datatable -->
+    <script src="{% static '/admin/src/plugins/datatables/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static '/admin/src/plugins/datatables/js/buttons.bootstrap4.min.js' %}"></script>
+    <script src="{% static '/admin/src/plugins/datatables/js/buttons.print.min.js' %}"></script>
+    <script src="{% static '/admin/src/plugins/datatables/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static '/admin/src/plugins/datatables/js/buttons.flash.min.js' %}"></script>
+    <script src="{% static '/admin/src/plugins/datatables/js/pdfmake.min.js' %}"></script>
+    <script src="{% static '/admin/src/plugins/datatables/js/vfs_fonts.js' %}"></script>
+    <!-- Datatable Setting js -->
+    <script src="{% static '/admin/vendors/scripts/datatable-setting.js' %}"></script>
+    <!-- Calendar -->
+    <script src="{% static '/admin/src/plugins/fullcalendar/fullcalendar.min.js' %}"></script>
+    <script src="{% static '/admin/vendors/scripts/calendar-setting.js' %}"></script>
+    <!-- Custom -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="{% static '/admin/js/admin.js' %}"></script>
+  </body>
+</html>

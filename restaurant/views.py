@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from .models import Restaurant, Food, Booking, MyTable, User, Customer, Category
+from .models import Restaurant, Food, Booking, MyTable, User, Customer, Category, Translation
 from django.conf import settings
 from django.views.decorators.http import require_GET, require_POST
 from datetime import datetime, timedelta
@@ -14,8 +14,9 @@ import uuid
 from django.contrib import messages
 import requests
 from . import helpers
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .forms import FoodForm
 
 # Frontend
 def index(request):
@@ -24,7 +25,8 @@ def index(request):
 def customer_index(request):
     restaurant = Restaurant.objects.all()[0]
     foods = Food.objects.filter(availability='available')  # Filter for availability only
-    return render(request, 'themes/'+settings.THEME+'/index.html', {'foods': foods, 'restaurant': restaurant})
+    categories = Category.objects.all()
+    return render(request, 'themes/'+settings.THEME+'/index.html', {'foods': foods, 'restaurant': restaurant, 'categories': categories})
 
 def customer_book(request):
     restaurant = Restaurant.objects.all()[0]
@@ -59,8 +61,8 @@ def customer_book_process(request):
         
         # Get all bookings for the given date
         bookings = Booking.objects.filter(
-            booking_date=booking_date
-        )
+            booking_date=booking_date.date()
+        ).exclude(special_requests='pickup-order').exclude(special_requests='delivery-order')    
         
         bookings_in_slot = []
         for booking in bookings:
@@ -160,7 +162,7 @@ def admin_calendar(request):
     # Get all bookings for the given date
     bookings = Booking.objects.filter(
         booking_date=booking_date.date()
-    )  
+    ).exclude(special_requests='pickup-order').exclude(special_requests='delivery-order')
 
     # Create a list of all booked time slots
     booked_tables = []
@@ -231,12 +233,25 @@ def admin_calendar(request):
 
     tables = MyTable.objects.all()
     
-    booking_lists = Booking.objects.order_by('-id')
+    booking_lists = Booking.objects.filter(
+        booking_date=booking_date.date()
+    ).exclude(special_requests='pickup-order').exclude(special_requests='delivery-order')
 
-    return render(request, 'account/calendar.html', {'available_time_slots': available_time_slots, 'tables': tables, 'date': date, 'booked_tables': booked_tables, 'booking_lists': booking_lists})
+    return render(request, 'admin/admin_calendar.html', {'available_time_slots': available_time_slots, 'tables': tables, 'date': date, 'booked_tables': booked_tables, 'booking_lists': booking_lists})
 
+@login_required
 def admin_profile(request):
-    return render(request, 'account/profile.html')
+    restaurant = Restaurant.objects.first()
+    current_user = request.user  # Get the current logged-in user
+    if request.method == 'POST':                
+        restaurant.name = request.POST.get('name')
+        restaurant.address = request.POST.get('address')
+        restaurant.phone = request.POST.get('phone')
+        restaurant.email = request.POST.get('email')
+        restaurant.description = request.POST.get('description')
+        restaurant.opening_hours = request.POST.get('opening_hours')
+        restaurant.save()
+    return render(request, 'admin/admin_profile.html', {'restaurant': restaurant, 'current_user': current_user})
 
 @login_required
 def admin_setting(request):
@@ -249,58 +264,60 @@ def admin_setting(request):
         restaurant.description = request.POST.get('description')
         restaurant.opening_hours = request.POST.get('opening_hours')
         restaurant.save()
-    return render(request, 'account/setting.html', {'restaurant': restaurant})
+    return render(request, 'admin/admin_setting.html', {'restaurant': restaurant})
 
 @login_required
 def admin_gallery(request):
-    return render(request, 'account/gallery.html')
+    return render(request, 'admin/admin_gallery.html')
 
 @login_required
+@csrf_exempt
 def admin_menu(request):
-    category_id = request.GET.get('cate')            
-    
-    if (category_id and category_id != 'all'):
-        # Store the category in session
-        request.session['category'] = category_id
-        category = Category.objects.get(id=category_id)            
-        foods = Food.objects.filter(category=category)
-    else:
-        category = None
-        # Check if category is in session
-        category_id = request.session.get('category')
-        if (category_id):
-            category = Category.objects.get(id=category_id)            
-            if category:
-                foods = Food.objects.filter(category=category)
-        else:
-            foods = Food.objects.order_by('-id')     
-            
-    categories = Category.objects.all()        
-    
-    food_id = request.GET.get('food_id')
-    if (food_id):
+    categories = Category.objects.all()
+    foods = Food.objects.order_by('-id')
+    food_id = request.GET.get('food')
+    if food_id:
         food = Food.objects.get(id=food_id)
+        if request.method == 'POST':
+            form = FoodForm(request.POST, request.FILES, instance=food)
+            if form.is_valid():
+                form.save()
+        return render(request, 'admin/admin_menu_edit.html', {'categories': categories, 'food': food})      
     else:
-        food = None
-    
-    paginator = Paginator(foods, 10)
-    
-    page = request.GET.get('page', 1)    
-    
-    try:
-        objects = paginator.page(page)        
-    except PageNotAnInteger:
-        objects = paginator.page(1)
-    except EmptyPage:
-        objects = paginator.page(paginator.num_pages) 
-    return render(request, 'account/menu.html', {'categories': categories, 'foods': objects, 'category': category, 'food': food})
+        return render(request, 'admin/admin_menu.html', {'categories': categories, 'foods': foods})
 
 @login_required
-def admin_page(request):
-    return render(request, 'account/page.html')    
+@csrf_exempt
+def admin_menu_add(request):
+    categories = Category.objects.all()    
+    transalations = Translation.objects.all()
+    if request.method == 'POST':
+        form = FoodForm(request.POST, request.FILES)
+        if 'en' in [t.language for t in transalations]:
+            default_translation_id = [t.id for t in transalations if t.language=='en'][0]
+        else:
+            default_translation_id = transalations[0].id
+        form.initial['translation_id'] = default_translation_id
+        
+        if form.is_valid():
+            form.save()
+            return redirect('menu')
+    else:
+        form = FoodForm()
+    return render(request, 'admin/admin_menu_add.html', {'form': form, 'categories': categories, 'transalations': transalations})
+
+@login_required
+@csrf_exempt    
+def admin_developer_setting(request):    
+    return render(request, 'admin/admin_developer_setting.html')
 
 @csrf_exempt
 def delete_booking(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
     booking.delete()
     return JsonResponse({'message': 'Booking deleted successfully!'})
+
+@login_required
+def admin_bookings(request):
+    bookings = Booking.objects.order_by('-id')
+    return render(request, 'admin/admin_bookings.html', {'bookings': bookings}) 

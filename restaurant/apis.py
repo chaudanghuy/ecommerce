@@ -2,12 +2,13 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
-from .models import Booking, MyTable, User, Customer, Restaurant, Food, Category
+from .models import Booking, MyTable, User, Customer, Restaurant, Food, Category, Booking, BookingDetail
 from .enums import Status
 from . import helpers
 from django.conf import settings
 import uuid
 import json
+from datetime import datetime as dt, timedelta
 
 # API
 @require_POST
@@ -215,3 +216,100 @@ def edit_food(request):
     else:
         return JsonResponse({'message': 'Invalid request.'}, status=400)
 
+@require_GET
+def get_calendar_events(request):
+    bookings = Booking.objects.all().exclude(special_requests='pickup-order').exclude(special_requests='delivery-order') 
+    events = [{
+        'start': f"{booking.booking_date} {booking.booking_time}",
+        'end': (dt.strptime(f"{booking.booking_date} {booking.booking_time}", "%Y-%m-%d %H:%M") + timedelta(minutes=booking.duration)).strftime('%Y-%m-%d %H:%M'),
+        'title': booking.customer.user.fullname,
+        'description': 'Number of guests: ' + str(booking.number_of_guests) + '\r' + 'Phone: ' + str(booking.customer.phone) + '\r' + 'Email: ' + str(booking.customer.user.email) + '\n' + 'Special requests: ' + booking.special_requests
+    } for booking in bookings]
+    
+    return JsonResponse({'events': events})
+
+@require_POST
+def order(request):
+    if request.method == 'POST':    
+        basket = request.POST.get('basket')
+        date = request.POST.get('date')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        address = request.POST.get('address')
+        special_requests = request.POST.get('special_requests')
+        
+        if date is None:
+            date = dt.today().strftime('%Y-%m-%d')
+            
+        if address is None:
+            address = 'No address provided'
+        
+        booking_details = json.loads(basket)
+        total_price = 0
+        for basket_id, details in booking_details.items():
+            food = Food.objects.get(pk=basket_id)
+            total_price += food.price * details['total']
+
+        user = User.objects.filter(username='guest').first()
+        if user is None:
+            user = User.objects.create(username='guest', password='123', email=email)
+            
+        customer = Customer.objects.get_or_create(user=user, address=address, phone=phone)[0]
+        
+        booking = Booking.objects.create(
+            customer=customer,
+            table=MyTable.objects.first(),
+            booking_date=date,
+            booking_time=dt.now().strftime('%H:%M'),
+            duration=60,
+            number_of_guests=1,
+            booking_status='Pending',            
+            special_requests=special_requests,
+            total_price=total_price
+        )
+
+        for basket_id, details in booking_details.items():
+            food = Food.objects.get(pk=basket_id)
+            BookingDetail.objects.create(
+                booking=booking,
+                food=food,
+                quantity=details['total'],
+                price=food.price
+            )
+
+        return JsonResponse({'message': 'Booking ordered successfully.'})
+    else:
+        return JsonResponse({'message': 'Invalid request.'}, status=400)
+
+@require_GET
+def get_bookings(request):
+    booking_id = request.GET.get('booking_id')
+    
+    if booking_id:
+        booking = Booking.objects.get(pk=booking_id)
+        
+        booking_details = BookingDetail.objects.filter(booking=booking)
+        customer = booking.customer
+        
+        booking_data = {
+            'id': booking.id,
+            'customer_name': customer.user.fullname,
+            'customer_email': customer.user.email,
+            'customer_phone': customer.phone,
+            'customer_address': customer.address,
+            'booking_date': booking.booking_date,
+            'booking_time': booking.booking_time,
+            'duration': booking.duration,
+            'booking_status': booking.booking_status,
+            'special_requests': booking.special_requests,
+            'total_price': booking.total_price,
+            'booking_details': [{
+                'food_name': booking_detail.food.name,
+                'food_price': booking_detail.price,
+                'quantity': booking_detail.quantity
+            } for booking_detail in booking_details]
+        }
+        
+        return JsonResponse(booking_data)
+    else:
+        return JsonResponse({'message': 'Invalid request.'}, status=400)

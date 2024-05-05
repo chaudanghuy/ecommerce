@@ -29,19 +29,14 @@
                     </a>
                     <ul class="submenu">
                         <li><a href={% url 'menu' %}>Foods</a></li>
-                        <li><a href="advanced-components.html">Add New Food</a></li>                        
+                        <li><a href={% url 'menu-add' %}>Add New Food</a></li>                        
                     </ul>
                 </li>
                 <li>
-                    <a href="chat.html" class="dropdown-toggle no-arrow">
-                        <span class="micon dw dw-diagram"></span><span class="mtext">Developer Setting</span>
+                    <a href={% url 'bookings' %} class="dropdown-toggle no-arrow">
+                        <span class="micon dw dw-list3"></span><span class="mtext">Bookings</span>
                     </a>
-                </li>
-                <li>
-                    <a href="invoice.html" class="dropdown-toggle no-arrow">
-                        <span class="micon dw dw-browser2"></span><span class="mtext">Account</span>
-                    </a>
-                </li>
+                </li>                 
                 <li>
                     <div class="dropdown-divider"></div>
                 </li>                

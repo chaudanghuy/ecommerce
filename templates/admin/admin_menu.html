@@ -1,0 +1,83 @@
+<!-- profile.html -->
+{% extends 'admin.html' %}
+
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}
+  Menu Management
+{% endblock %}
+
+{% block content %}
+  {% include '../includes/admin/loader.html' %}
+
+  {% include '../includes/admin/header.html' %}
+
+  {% include '../includes/admin/layout_setting.html' %}
+
+  {% include '../includes/admin/sidebar.html' %}
+  <div class="mobile-menu-overlay"></div>
+
+  <div class="main-container">
+    <div class="pd-ltr-20 xs-pd-20-10">
+      <div class="min-height-200px">
+        <div class="page-header">
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="title">
+                <h4>Menu</h4>
+              </div>
+              <nav aria-label="breadcrumb" role="navigation">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item">
+                    <a href="{% url 'manage' %}">Home</a>
+                  </li>
+                  <li class="breadcrumb-item active" aria-current="page">Menu</li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+        <!-- Simple Datatable start -->
+        <div class="card-box mb-30">
+          <div class="pd-20">
+            <h4 class="text-blue h4">Menu</h4>
+          </div>
+          <div class="pb-20">
+            <table class="data-table table stripe hover nowrap">
+              <thead>
+                <tr>
+                  <th class="table-plus datatable-nosort">Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th class="datatable-nosort">Is Availability</th>
+                  <th class="datatable-nosort">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for food in foods %}
+                  <tr>
+                    <td class="table-plus">{{ food.name }}</td>
+                    <td>{{ food.category.name }}</td>
+                    <td>{{ food.price }}</td>
+                    <td>{{ food.availability }}</td>
+                    <td>
+                      <div class="dropdown">
+                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown"><i class="dw dw-more"></i></a>
+                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                          <a class="dropdown-item" href="{% url 'menu' %}?food={{ food.id }}"><i class="dw dw-edit2"></i> Edit</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Simple Datatable End -->
+      </div>
+      {% include '../includes/admin/footer.html' %}
+    </div>
+  </div>
+{% endblock %}

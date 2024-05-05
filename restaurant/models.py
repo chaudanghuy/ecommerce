@@ -4,8 +4,17 @@ from .enums import Status, BookingStatus
 import uuid
 
 # Create your models here.
-class Restaurant(models.Model):
+class Translation(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    language = models.CharField(max_length=10)
+    code = models.CharField(max_length=10)    
+    description = models.TextField()      
+    
+    def __str__(self) -> str:
+        return self.language
+    
+class Restaurant(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)    
     name = models.CharField(max_length=100)
     address = models.TextField()
     phone = models.CharField(max_length=20)
@@ -69,15 +78,6 @@ class Menu(models.Model):
     def __str__(self) -> str:
         return self.name
 
-class Translation(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    language = models.CharField(max_length=10)
-    code = models.CharField(max_length=10)    
-    description = models.TextField()      
-    
-    def __str__(self) -> str:
-        return self.language
-
 class Category(models.Model):
     id =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     translation = models.ForeignKey(Translation, on_delete=models.CASCADE)
@@ -99,7 +99,7 @@ class CategorySub(models.Model):
     
 class Food(models.Model): 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    translation = models.ForeignKey(Translation, on_delete=models.CASCADE)  
+    translation_id = models.ForeignKey(Translation, on_delete=models.CASCADE, db_column='translation_id')  
     category = models.ForeignKey(Category, default=1, on_delete=models.CASCADE)  
     category_sub = models.ForeignKey(CategorySub, on_delete=models.CASCADE, blank=True, null=True)   
     name = models.CharField(max_length=100)

@@ -1,4 +1,6 @@
 var container = $('.book-a-table form').length > 0 ? $('.book-a-table form').parent() : "body";
+var basket = [];
+
 $(function () {
     $('#datepicker').datepicker({
         format: 'yyyy-mm-dd',
@@ -25,7 +27,21 @@ $(function () {
         setTimeout(function () {
             window.location.reload();
         }, 3000);
-    })
+    });
+
+    $('#pickup-date').datepicker({
+        format: 'yyyy-mm-dd',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+        orientation: 'top'
+    });
+
+    // Listen for modal close event
+    $('#order-success-modal').on('hidden.bs.modal', function (e) {
+        // Clear session storage for basket
+        localStorage.removeItem('basket');
+    });
 });
 
 (function () {
@@ -205,3 +221,189 @@ $('#booking-btn').on('click', function (e) {
         }
     });
 });
+
+$('#order-delivery-method').on('change', function () {
+    var value = $(this).val();
+    if (value === 'delivery-order') {
+        $('#delivery-method').removeClass('d-none');
+        $('#pickup-method').addClass('d-none');
+    } else if (value === 'pickup-order') {
+        $('#delivery-method').addClass('d-none');
+        $('#pickup-method').removeClass('d-none');
+    }
+});
+
+$('.add-to-basket').on('click', function (e) {
+    var foodId = $(this).data('food-id');
+    var basket = JSON.parse(localStorage.getItem('basket')) || {};
+    if (!basket.hasOwnProperty(foodId)) {
+        basket[foodId] = { total: 1, price: $(this).data('food-price'), name: $(this).data('food-name') };
+    } else {
+        basket[foodId] = { total: basket[foodId].total + 1, price: $(this).data('food-price'), name: $(this).data('food-name') };
+    }
+
+    $('.basket-food').each(function () {
+        var el = $(this);
+        var foodIdFromElement = el.data('food-id');
+        if (foodIdFromElement === foodId) {
+            el.val(basket[foodId].total);
+        }
+    });
+
+    localStorage.setItem('basket', JSON.stringify(basket));
+    updateBasketTotal();
+});
+
+$('.reduce-to-basket').on('click', function (e) {
+    var foodId = $(this).data('food-id');
+    var basket = JSON.parse(localStorage.getItem('basket')) || {};
+    let basketValue = basket[foodId];
+    if (basket.hasOwnProperty(foodId)) {
+        if (basket[foodId].total > 1) {
+            basketValue = basket[foodId] - 1
+            basket[foodId] = { total: basketValue, price: $(this).data('food-price'), name: $(this).data('food-name') };
+        } else {
+            basketValue = 0;
+            delete basket[foodId];
+        }
+    }
+
+    $('.basket-food').each(function () {
+        var el = $(this);
+        var foodIdFromElement = el.data('food-id');
+        if (foodIdFromElement === foodId) {
+            el.val(basketValue);
+        }
+    });
+    localStorage.setItem('basket', JSON.stringify(basket));
+    updateBasketTotal();
+});
+
+function updateBasketTotal() {
+    var basket = JSON.parse(localStorage.getItem('basket')) || {};
+    var total = 0;
+    var count = 0;
+    for (var foodId in basket) {
+        count += basket[foodId].total
+        total += basket[foodId].total * basket[foodId].price;
+    }
+    $('.total-basket-items').text(count);
+    $('.total-basket-total').text(total);
+}
+
+function loadBasket() {
+    var basket = JSON.parse(localStorage.getItem('basket')) || {};
+    for (var foodId in basket) {
+        $('.basket-food').each(function () {
+            var el = $(this);
+            var foodIdFromElement = el.data('food-id');
+            if (foodIdFromElement === foodId) {
+                el.val(basket[foodId].total);
+            }
+        });
+    }
+
+    updateBasketTotal();
+}
+
+loadBasket();
+
+$('#order-finish').click(function () {
+    var basket = JSON.parse(localStorage.getItem('basket'));
+    if (!basket) {
+        alert('Your basket is empty');
+        return;
+    }
+
+
+    var deliveryMethod = $('#order-delivery-method').val();
+    if (deliveryMethod == 'none') {
+        alert('Please select delivery method');
+        return;
+    }
+
+    if (deliveryMethod == 'delivery-order') {
+        var address = $('#delivery-address').val();
+        if (!address) {
+            alert('Please enter your delivery address');
+            return;
+        }
+
+        var email = $('#delivery-email').val();
+        if (!email) {
+            alert('Please enter your email');
+            return;
+        }
+        var phone = $('#delivery-phone').val();
+        if (!phone) {
+            alert('Please enter your phone number');
+            return;
+        }
+    } else if (deliveryMethod == 'pickup-order') {
+        var date = $('#pickup-date').val();
+        if (!date && deliveryMethod == 'pickup-order') {
+            alert('Please select pickup date');
+            return;
+        }
+        var email = $('#pickup-email').val();
+        if (!email) {
+            alert('Please enter your email');
+            return;
+        }
+        var phone = $('#pickup-phone').val();
+        if (!phone) {
+            alert('Please enter your phone number');
+            return;
+        }
+    }
+
+
+    $.ajax({
+        url: '/api/order',
+        data: {
+            basket: JSON.stringify(basket),
+            date: date,
+            email: email,
+            address: address,
+            phone: phone,
+            special_requests: deliveryMethod,
+            csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+        },
+        method: 'POST',
+        success: function (response) {
+            loadOrderItemtoSuccessModal();
+            $('#foodModal').modal('hide');
+            $('#order-success-modal').modal('show');
+        },
+        error: function () {
+            alert('Something went wrong. Please try again later.');
+        },
+    });
+})
+
+function loadOrderItemtoSuccessModal() {
+    // Retrieve basket data from localStorage
+    var basket = JSON.parse(localStorage.getItem('basket'));
+
+    // Render order items in modal body
+    if (basket) {
+        var orderItemsHtml = '';
+        $.each(basket, function (itemId, itemData) {
+            orderItemsHtml += '<tr>';
+            orderItemsHtml += '<td>' + itemData.name + '</td>';
+            orderItemsHtml += '<td>' + itemData.total + '</td>';
+            orderItemsHtml += '<td>' + itemData.price + '</td>';
+            orderItemsHtml += '</tr>';
+        });
+
+        var total = 0;
+        $.each(basket, function (itemId, itemData) {
+            total += itemData.total * itemData.price;
+        });
+        $('#totalOrder').text(total.toFixed(2));
+        $('#orderItems').html(orderItemsHtml);
+
+        // Clear session storage for basket
+        localStorage.removeItem('basket');
+    }
+}
