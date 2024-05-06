@@ -186,7 +186,7 @@ $('#booking-btn').on('click', function (e) {
             $('.error-message').hide();
             $('.sent-message').text(response.message).show();
 
-            $('#checking-booking-hour').html(response.booking_datetime)
+            $('#checking-booking-hour').html(response.booking_enddattime)
             $('#reservationModal').modal('show');
 
             // code fragment
@@ -404,6 +404,7 @@ function loadOrderItemtoSuccessModal() {
         $('#orderItems').html(orderItemsHtml);
 
         // Clear session storage for basket
+        $('.basket-food').val(0);
         localStorage.removeItem('basket');
     }
 }

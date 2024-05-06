@@ -657,9 +657,9 @@
 <!-- Modal -->
 <div class="modal fade" id="foodModal" tabindex="-1" aria-labelledby="foodModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content">
-      <div class="modal-header bg-secondary">
-        <h5 class="modal-title" id="foodModalLabel">Order Online</h5>
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h3 class="modal-title" id="foodModalLabel" style="color: #cda45e;">Order Online</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" style="overflow-y: auto;">
@@ -667,22 +667,21 @@
           <div class="container py-2">            
             <div class="row d-flex justify-content-center align-items-center">
               <div class="col-12">
-                <div class="card card-registration card-registration-2 bg-secondary" style="border-radius: 15px;">
+                <div class="card card-registration card-registration-2 bg-dark" style="border-radius: 15px;">
                   <div class="card-body p-0">
                     <div class="row g-0">
                       <div class="col-lg-8">
                         <div class="p-5">
                           <div class="d-flex justify-content-between align-items-center mb-5">
-                            <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
-                            <h6 class="mb-0 text-muted">3 items</h6>
+                            <h1 class="fw-bold mb-0" style="color: #cda45e;">Check Our Tasty Menu</h1>                            
                           </div>                          
 
                           <!-- Tabs navs -->
                           <nav>
                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                              <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#{{ categories.0.filter_code }}" type="button" role="tab" aria-controls="nav-home" aria-selected="true">{{ categories.0.name }}</button>
-                              <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#{{ categories.1.filter_code }}" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">{{ categories.1.name }}</button>
-                              <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#{{ categories.2.filter_code }}" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">{{ categories.2.name }}</button>
+                              <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#{{ categories.0.filter_code }}" type="button" role="tab" aria-controls="nav-home" aria-selected="true" style="color: #cda45e;">{{ categories.0.name }}</button>
+                              <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#{{ categories.1.filter_code }}" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" style="color: #cda45e;">{{ categories.1.name }}</button>
+                              <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#{{ categories.2.filter_code }}" type="button" role="tab" aria-controls="nav-contact" aria-selected="false" style="color: #cda45e;">{{ categories.2.name }}</button>
                             </div>
                           </nav>
                           <div class="tab-content" id="nav-tabContent">
@@ -697,7 +696,7 @@
                                         <a href="{{food.image.url}}" data-lightbox="image-set" data-title="{{food.name}}">
                                         <img
                                           src="{{food.image.url}}"
-                                          class="img-fluid img-thumbnail rounded-3" 
+                                          class="rounded-circle" 
                                           alt="{{food.name}}"
                                           style="width: 80px; height: 80px;"
                                         >
@@ -710,23 +709,23 @@
                                       <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                                         <div class="input-group quantity-control row basket-row">                                          
                                           <span class="input-group-btn text-center">
-                                            <button type="button" class="btn btn-default btn-number add-to-basket" data-type="plus" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
+                                            <button type="button" class="btn text-white btn-default btn-number add-to-basket" data-type="plus" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
                                               <i class="fa-solid fa-plus"></i>
                                             </button>
                                           </span>
-                                          <input type="text" name="quant[1]" class="form-control input-number text-center basket-food" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}} value="0" min="1" max="10">
+                                          <input disabled type="text" name="quant[1]" class="form-control input-number text-center basket-food" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}} value="0" min="1" max="10">
                                           <span class="input-group-btn text-center">
-                                            <button type="button" class="btn btn-default btn-number reduce-to-basket" data-type="minus" data-food-name={{food.name}} data-field="quant[1]" data-food-id="{{food.id}}" data-food-price={{food.price}}>
+                                            <button type="button" class="btn text-white btn-default btn-number reduce-to-basket" data-type="minus" data-food-name={{food.name}} data-field="quant[1]" data-food-id="{{food.id}}" data-food-price={{food.price}}>
                                               <i class="fa-solid fa-minus"></i>
                                             </button>
                                           </span>
                                         </div>
                                       </div>
                                       <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                        <h6 class="mb-3">{{food.price}}</h6>
+                                        <h6 class="mb-3" style="color: #cda45e;">{{food.price}}</h6>
                                       </div>
                                       <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                        <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                                        
                                       </div>
                                     </div>                               
                                     {% endif %}
@@ -746,7 +745,7 @@
                                         <a href="{{food.image.url}}" data-lightbox="image-set" data-title="{{food.name}}">
                                         <img
                                           src="{{food.image.url}}"
-                                          class="img-fluid img-thumbnail rounded-3" 
+                                          class="rounded-circle" 
                                           alt="{{food.name}}"
                                           style="width: 80px; height: 80px;">
                                         </a>
@@ -758,23 +757,23 @@
                                       <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                                         <div class="input-group quantity-control row basket-row">                                          
                                           <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default btn-number add-to-basket" data-type="plus" data-field="quant[1]" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
+                                            <button type="button" class="btn text-white btn-default btn-number add-to-basket" data-type="plus" data-field="quant[1]" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
                                               <i class="fa-solid fa-plus"></i>
                                             </button>
                                           </span>
-                                          <input type="text" name="quant[1]" class="form-control input-number text-center basket-food" value="0" min="1" max="10" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-value={{food.price}}>
+                                          <input disabled type="text" name="quant[1]" class="form-control input-number text-center basket-food" value="0" min="1" max="10" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-value={{food.price}}>
                                           <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default btn-number reduce-to-basket" data-type="minus" data-field="quant[1]" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
+                                            <button type="button" class="btn text-white btn-default btn-number reduce-to-basket" data-type="minus" data-field="quant[1]" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
                                               <i class="fa-solid fa-minus"></i>
                                             </button>
                                           </span>
                                         </div>
                                       </div>
                                       <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                        <h6 class="mb-3">{{food.price}}</h6>
+                                        <h6 class="mb-3" style="color: #cda45e;">{{food.price}}</h6>
                                       </div>
                                       <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                        <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                                        
                                       </div>
                                     </div>                               
                                     {% endif %}
@@ -794,7 +793,7 @@
                                         <a href="{{food.image.url}}" data-lightbox="image-set" data-title="{{food.name}}">
                                         <img
                                           src="{{food.image.url}}"
-                                          class="img-fluid img-thumbnail rounded-3" 
+                                          class="rounded-circle" 
                                           alt="{{food.name}}"
                                           style="width: 80px; height: 80px;"
                                         >
@@ -807,23 +806,23 @@
                                       <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                                         <div class="input-group quantity-control row basket-row">                                          
                                           <span class="input-group-btn text-center">
-                                            <button type="button" class="btn btn-default btn-number add-to-basket" data-type="plus" data-field="quant[1]" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
+                                            <button type="button" class="btn text-white btn-default btn-number add-to-basket" data-type="plus" data-field="quant[1]" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
                                               <i class="fa-solid fa-plus"></i>
                                             </button>
                                           </span>
-                                          <input type="text" name="quant[1]" class="form-control input-number text-center basket-food" value="0" min="1" max="10" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
+                                          <input disabled type="text" name="quant[1]" class="form-control input-number text-center basket-food" value="0" min="1" max="10" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
                                           <span class="input-group-btn text-center">
-                                            <button type="button" class="btn btn-default btn-number reduce-to-basket" data-type="minus" data-field="quant[1]" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
+                                            <button type="button" class="btn text-white btn-default btn-number reduce-to-basket" data-type="minus" data-field="quant[1]" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
                                               <i class="fa-solid fa-minus"></i>
                                             </button>
                                           </span>
                                         </div>
                                       </div>
                                       <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                        <h6 class="mb-3">{{food.price}}</h6>
+                                        <h6 class="mb-3" style="color: #cda45e;">{{food.price}}</h6>
                                       </div>
                                       <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                        <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
+                                        
                                       </div>
                                     </div>                               
                                     {% endif %}

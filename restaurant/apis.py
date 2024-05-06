@@ -109,6 +109,7 @@ def book_table(request):
     return JsonResponse({
         'message': 'Your booking request was sent. We will call back or send an Email to confirm your reservation. Thank you!',
         'booking_datetime': booking_datetime.strftime('%Y-%m-%d %H:%M'),
+        'booking_enddattime': (booking_datetime + timedelta(minutes=duration)).strftime('%Y-%m-%d %H:%M'),
         'booking_reference': booking_code,
         'booking_date': booking_date,
         'booking_time': booking_time,
@@ -250,9 +251,9 @@ def order(request):
             food = Food.objects.get(pk=basket_id)
             total_price += food.price * details['total']
 
-        user = User.objects.filter(username='guest').first()
-        if user is None:
-            user = User.objects.create(username='guest', password='123', email=email)
+        user = User.objects.filter(username=email).first()
+        if user is None:            
+            user = User.objects.create(username=email , password='123', email=email)
             
         customer = Customer.objects.get_or_create(user=user, address=address, phone=phone)[0]
         
