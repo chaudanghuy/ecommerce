@@ -1,7 +1,7 @@
 var container = $('.book-a-table form').length > 0 ? $('.book-a-table form').parent() : "body";
 var basket = [];
 
-$(function () {
+$(function() {
     $('#datepicker').datepicker({
         format: 'yyyy-mm-dd',
         container: container,
@@ -23,8 +23,8 @@ $(function () {
     });
 
     var myModalEl = document.getElementById('reservationModal')
-    myModalEl.addEventListener('hidden.bs.modal', function (event) {
-        setTimeout(function () {
+    myModalEl.addEventListener('hidden.bs.modal', function(event) {
+        setTimeout(function() {
             window.location.reload();
         }, 3000);
     });
@@ -38,19 +38,19 @@ $(function () {
     });
 
     // Listen for modal close event
-    $('#order-success-modal').on('hidden.bs.modal', function (e) {
+    $('#order-success-modal').on('hidden.bs.modal', function(e) {
         // Clear session storage for basket
         localStorage.removeItem('basket');
     });
 });
 
-(function () {
+(function() {
     emailjs.init({
         publicKey: "x1TPhBZ7O-mNk2z3V",
     });
 })();
 
-$('#sendMessage').on('click', function (e) {
+$('#sendMessage').on('click', function(e) {
     e.preventDefault();
 
 
@@ -112,14 +112,14 @@ $('#sendMessage').on('click', function (e) {
         type: 'POST',
         data: JSON.stringify(data),
         contentType: 'application/json'
-    }).done(function () {
+    }).done(function() {
         $('.sent-message').text('Your mail is sent!').show();
-    }).fail(function (error) {
+    }).fail(function(error) {
         $('.error-message').text('Oops... ' + JSON.stringify(error)).show();
     });
 });
 
-$('#booking-btn').on('click', function (e) {
+$('#booking-btn').on('click', function(e) {
     e.preventDefault();
     var fullname = $('input[name=fullname]').val().trim();
     if (fullname === '') {
@@ -180,7 +180,7 @@ $('#booking-btn').on('click', function (e) {
             total_customer: total_customer,
             special_requests: special_requests
         },
-        success: function (response) {
+        success: function(response) {
 
             $('.loading').hide();
             $('.error-message').hide();
@@ -208,13 +208,13 @@ $('#booking-btn').on('click', function (e) {
                 type: 'POST',
                 data: JSON.stringify(data),
                 contentType: 'application/json'
-            }).done(function () {
+            }).done(function() {
                 // $('.sent-message').text('Your mail is sent!').show();
-            }).fail(function (error) {
+            }).fail(function(error) {
                 // $('.error-message').text('Oops... ' + JSON.stringify(error)).show();
             });
         },
-        error: function (xhr, errmsg, err) {
+        error: function(xhr, errmsg, err) {
             $('.loading').hide();
             $('.sent-message').hide();
             $('.error-message').text(xhr.responseText).show();
@@ -222,7 +222,7 @@ $('#booking-btn').on('click', function (e) {
     });
 });
 
-$('#order-delivery-method').on('change', function () {
+$('#order-delivery-method').on('change', function() {
     var value = $(this).val();
     if (value === 'delivery-order') {
         $('#delivery-method').removeClass('d-none');
@@ -233,7 +233,7 @@ $('#order-delivery-method').on('change', function () {
     }
 });
 
-$('.add-to-basket').on('click', function (e) {
+$('.add-to-basket').on('click', function(e) {
     var foodId = $(this).data('food-id');
     var basket = JSON.parse(localStorage.getItem('basket')) || {};
     if (!basket.hasOwnProperty(foodId)) {
@@ -242,7 +242,7 @@ $('.add-to-basket').on('click', function (e) {
         basket[foodId] = { total: basket[foodId].total + 1, price: $(this).data('food-price'), name: $(this).data('food-name') };
     }
 
-    $('.basket-food').each(function () {
+    $('.basket-food').each(function() {
         var el = $(this);
         var foodIdFromElement = el.data('food-id');
         if (foodIdFromElement === foodId) {
@@ -254,7 +254,7 @@ $('.add-to-basket').on('click', function (e) {
     updateBasketTotal();
 });
 
-$('.reduce-to-basket').on('click', function (e) {
+$('.reduce-to-basket').on('click', function(e) {
     var foodId = $(this).data('food-id');
     var basket = JSON.parse(localStorage.getItem('basket')) || {};
     let basketValue = basket[foodId];
@@ -268,7 +268,7 @@ $('.reduce-to-basket').on('click', function (e) {
         }
     }
 
-    $('.basket-food').each(function () {
+    $('.basket-food').each(function() {
         var el = $(this);
         var foodIdFromElement = el.data('food-id');
         if (foodIdFromElement === foodId) {
@@ -294,7 +294,7 @@ function updateBasketTotal() {
 function loadBasket() {
     var basket = JSON.parse(localStorage.getItem('basket')) || {};
     for (var foodId in basket) {
-        $('.basket-food').each(function () {
+        $('.basket-food').each(function() {
             var el = $(this);
             var foodIdFromElement = el.data('food-id');
             if (foodIdFromElement === foodId) {
@@ -308,7 +308,7 @@ function loadBasket() {
 
 loadBasket();
 
-$('#order-finish').click(function () {
+$('#order-finish').click(function() {
     var basket = JSON.parse(localStorage.getItem('basket'));
     if (!basket) {
         alert('Your basket is empty');
@@ -370,12 +370,12 @@ $('#order-finish').click(function () {
             csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
         },
         method: 'POST',
-        success: function (response) {
+        success: function(response) {
             loadOrderItemtoSuccessModal();
             $('#foodModal').modal('hide');
             $('#order-success-modal').modal('show');
         },
-        error: function () {
+        error: function() {
             alert('Something went wrong. Please try again later.');
         },
     });
@@ -388,7 +388,7 @@ function loadOrderItemtoSuccessModal() {
     // Render order items in modal body
     if (basket) {
         var orderItemsHtml = '';
-        $.each(basket, function (itemId, itemData) {
+        $.each(basket, function(itemId, itemData) {
             orderItemsHtml += '<tr>';
             orderItemsHtml += '<td>' + itemData.name + '</td>';
             orderItemsHtml += '<td>' + itemData.total + '</td>';
@@ -397,7 +397,7 @@ function loadOrderItemtoSuccessModal() {
         });
 
         var total = 0;
-        $.each(basket, function (itemId, itemData) {
+        $.each(basket, function(itemId, itemData) {
             total += itemData.total * itemData.price;
         });
         $('#totalOrder').text(total.toFixed(2));
@@ -405,6 +405,8 @@ function loadOrderItemtoSuccessModal() {
 
         // Clear session storage for basket
         $('.basket-food').val(0);
+        $('.total-basket-items').text(0);
+        $('.total-basket-total').text(0);
         localStorage.removeItem('basket');
     }
 }
