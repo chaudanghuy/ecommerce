@@ -2,3 +2,4 @@
 __pycache__
 # this token contains your sensitive google service account info
 google-credentials.json
+db.sqlite3

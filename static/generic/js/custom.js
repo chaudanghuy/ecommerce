@@ -137,7 +137,7 @@ $('#booking-btn').on('click', function (e) {
     }
 
     var phone = $('input[name=phone]').val().trim();
-    if (!phonePattern.test(phone)) {
+    if (phone === '') {
         $('.error-message').text('Please input valid phone number').show();
         return;
     }
