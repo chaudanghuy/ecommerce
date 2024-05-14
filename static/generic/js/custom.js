@@ -410,3 +410,25 @@ function loadOrderItemtoSuccessModal() {
         localStorage.removeItem('basket');
     }
 }
+
+// JavaScript for updating cart count
+var cartCount = 0; // Initialize cart count
+
+window.addEventListener('scroll', function() {
+    var floatingCart = document.querySelector('.floating-cart');
+    if (window.scrollY > 100) { // Change 100 to your desired scroll position
+        floatingCart.style.opacity = '1';
+    } else {
+        floatingCart.style.opacity = '0';
+    }
+});
+
+// Update cart count function
+function updateCartCount(count) {
+    var cartCountSpan = document.querySelector('.cart-count');
+    cartCount = count;
+    cartCountSpan.textContent = cartCount;
+}
+
+// Example usage:
+updateCartCount(3); // Update cart count to 3

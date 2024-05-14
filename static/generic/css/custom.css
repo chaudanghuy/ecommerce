@@ -1,4 +1,5 @@
 /* Tùy chỉnh CSS */
+
 .table-card {
     margin: 10px;
     border: 1px solid #ccc;
@@ -85,4 +86,50 @@
 .tab-pane-content {
     height: 80vh;
     overflow-y: auto;
+}
+
+
+/* Other styles for menu items */
+
+
+/* Floating cart styles */
+
+.floating-cart {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    z-index: 999;
+}
+
+.cart-icon {
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cart-count {
+    position: absolute;
+    top: -10px;
+    /* Adjust top positioning */
+    right: -10px;
+    /* Adjust right positioning */
+    background-color: red;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+}
+
+.cart-icon:hover {
+    background-color: darkgreen;
 }

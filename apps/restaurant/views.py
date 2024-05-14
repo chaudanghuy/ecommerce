@@ -37,6 +37,17 @@ def customer_book(request):
 def customer_gallery(request):
     return render(request, 'themes/'+settings.THEME+'/gallery.html')
 
+def customer_order(request):
+    restaurant = Restaurant.objects.all()[0]
+    foods = Food.objects.filter(availability='available')  # Filter for availability only
+    return render(request, 'themes/'+settings.THEME+'/order.html', {'foods': foods, 'restaurant': restaurant})
+
+def customer_order_book(request):
+    return render(request, 'themes/'+settings.THEME+'/order_book.html')
+
+def customer_order_confirm(request):
+    return render(request, 'themes/'+settings.THEME+'/order_confirm.html')
+
 # Web 
 @require_POST
 @csrf_exempt
@@ -276,15 +287,16 @@ def admin_menu(request):
     categories = Category.objects.all()
     foods = Food.objects.order_by('-id')
     food_id = request.GET.get('food')
+    transalations = Translation.objects.all()
     if food_id:
         food = Food.objects.get(id=food_id)
         if request.method == 'POST':
             form = FoodForm(request.POST, request.FILES, instance=food)
             if form.is_valid():
                 form.save()
-        return render(request, 'admin/admin_menu_edit.html', {'categories': categories, 'food': food})      
+        return render(request, 'admin/admin_menu_edit.html', {'categories': categories, 'food': food, 'transalations': transalations})      
     else:
-        return render(request, 'admin/admin_menu.html', {'categories': categories, 'foods': foods})
+        return render(request, 'admin/admin_menu.html', {'categories': categories, 'foods': foods, 'transalations': transalations})
 
 @login_required
 @csrf_exempt

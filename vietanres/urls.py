@@ -23,7 +23,7 @@ urlpatterns = [
     # admin
     path('supersecretadmin888/', admin.site.urls),
     # main
-    path('', include('restaurant.urls')),    
+    path('', include('apps.restaurant.urls')),    
 ]
 
 if settings.ENV == "Local":
