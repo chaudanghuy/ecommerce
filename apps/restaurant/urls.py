@@ -12,7 +12,7 @@ urlpatterns = [
     path('book', views.customer_book, name='book'),
     path('book-table', views.customer_book_process, name='book-table'),
     path('gallery', views.customer_gallery, name='gallery'),    
-    path('order', views.customer_order, name='order_online'),
+    path('order', views.customer_order, name='order-online'),
     path('order-book', views.customer_order_book, name='order-book'),
     path('order-confirm', views.customer_order_confirm, name='order-confirm'),
 

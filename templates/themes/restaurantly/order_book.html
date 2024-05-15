@@ -5,8 +5,9 @@
 
             <div class="d-flex justify-content-between align-items-center">
                 <ol>
-                    <li><a href={% url 'home' %}>Home</a></li>
-                    <li>Order</li>
+                    <li><a href={% url 'home' %}>Home </a></li>
+                    <li><a href="{% url 'order-online' %}">Order </a></li>
+                    <li>Cart</li>
                 </ol>
             </div>
 
@@ -18,49 +19,35 @@
         <div class="container" data-aos="fade-up">
 
             <div class="section-title">
-                <h2>Menu</h2>
-                <p>Check Our Tasty Menu</p>
+                <div class="order-step">
+                    <a href={% url 'order-online' %}><i class="fas fa-list"></i></a>
+                    <span class="step-item"></span> <span class="active"><i class="fas fa-shopping-cart"></i></span>
+                    <span class="step-item"></span> <a href="{% url 'order-confirm' %}"><i class="fas fa-check-circle"></i></a>
+                </div>
+                <p class="mt-5">Cart</p>
             </div>
 
-            <div class="row" data-aos="fade-up" data-aos-delay="100">
-                <div class="col-lg-12 d-flex justify-content-center">
-                    <ul id="menu-flters">
-                        <li data-filter="*" class="filter-active">All</li>
-                        <li data-filter=".filter-small-bites">Small Bites</li>
-                        <li data-filter=".filter-mains">Mains</li>
-                        <li data-filter=".filter-desserts">Desserts</li>
-                    </ul>
+            <div class="row">
+                <!-- Product List -->
+                <div class="col-md-8 product-list">
                 </div>
-            </div>
 
-            <div class="row menu-container" data-aos="fade-up" data-aos-delay="200">
-                {% for food in foods %}
-                <div class="col-lg-6 menu-item {{food.category.filter_code}}">
-                    <a href="{{food.image.url}}" data-lightbox="image-set" data-title="{{food.name}}">
-                        <img src="{{food.image.url}}" alt="{{food.name}}" class="menu-img" alt="">
-                    </a>
-                    <div class="menu-content">
-                        <a href="#">{{food.name}}</a><span>{{food.price}}</span>
-                    </div>
-                    <div class="menu-ingredients">
-                        {{food.description}}
-                    </div>
-                    <div class="add-to-cart text-end">
-                        <a href="#">Add to Cart</a>
+                <!-- Checkout Summary -->
+                <div class="col-md-4 checkout-summary">
+                    <h3 style="color: #cda45e;">Checkout</h3>
+                    <hr>
+                    <p><strong>Quantity:</strong> <span class="total-basket-items"></span></p>
+                    <p class="total-price"><strong>Total:</strong> <span class="total-basket-total"></span></p>
+                    <hr>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'order-confirm' %}" class="btn btn-danger btn-block">Proceed to Checkout</a>
                     </div>
                 </div>
-                {% endfor %}
             </div>
 
         </div>
     </section>
     <!-- End Menu Section -->
-
-
-    <div class="floating-cart">
-        <button class="cart-icon"><i class="fas fa-shopping-cart"></i></button>
-        <span class="cart-count">5</span>
-    </div>
 
 </main>
 <!-- End #main -->

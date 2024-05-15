@@ -18,8 +18,12 @@
         <div class="container" data-aos="fade-up">
 
             <div class="section-title">
-                <h2>Menu</h2>
-                <p>Check Our Tasty Menu</p>
+                <div class="order-step">
+                    <span class="active"><i class="fas fa-list"></i></span>
+                    <span class="step-item"></span><a href="{% url 'order-book' %}"><i class="fas fa-shopping-cart"></i></a>
+                    <span class="step-item"></span> <a href="{% url 'order-confirm' %}"><i class="fas fa-check-circle"></i></a>
+                </div>
+                <p class="mt-5">Foods you love, delivered to you</p>
             </div>
 
             <div class="row" data-aos="fade-up" data-aos-delay="100">
@@ -46,7 +50,7 @@
                         {{food.description}}
                     </div>
                     <div class="add-to-cart text-end">
-                        <a href="#">Add to Cart</a>
+                        <a class="add-to-basket" href="#" data-food-name="{{food.name}}" data-food-id="{{food.id}}" data-food-price="{{food.price}}" data-food-image="{{food.image.url}}">Add to Cart</a>
                     </div>
                 </div>
                 {% endfor %}
@@ -57,9 +61,9 @@
     <!-- End Menu Section -->
 
 
-    <div class="floating-cart">
+    <div id="my-cart" class="floating-cart d-none">
         <button class="cart-icon"><i class="fas fa-shopping-cart"></i></button>
-        <span class="cart-count">5</span>
+        <span class="cart-count"></span>
     </div>
 
 </main>

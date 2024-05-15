@@ -219,7 +219,7 @@ def edit_food(request):
 
 @require_GET
 def get_calendar_events(request):
-    bookings = Booking.objects.all().exclude(special_requests='pickup-order').exclude(special_requests='delivery-order') 
+    bookings = Booking.objects.all().exclude(customer__address__icontains='pickup-order') 
     events = [{
         'start': f"{booking.booking_date} {booking.booking_time}",
         'end': (dt.strptime(f"{booking.booking_date} {booking.booking_time}", "%Y-%m-%d %H:%M") + timedelta(minutes=booking.duration)).strftime('%Y-%m-%d %H:%M'),
@@ -234,6 +234,7 @@ def order(request):
     if request.method == 'POST':    
         basket = request.POST.get('basket')
         date = request.POST.get('date')
+        time = request.POST.get('time')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
         address = request.POST.get('address')
@@ -243,7 +244,7 @@ def order(request):
             date = dt.today().strftime('%Y-%m-%d')
             
         if address is None:
-            address = 'No address provided'
+            address = 'pickup-order'
         
         booking_details = json.loads(basket)
         total_price = 0
@@ -261,9 +262,9 @@ def order(request):
             customer=customer,
             table=MyTable.objects.first(),
             booking_date=date,
-            booking_time=dt.now().strftime('%H:%M'),
-            duration=60,
-            number_of_guests=1,
+            booking_time=time,
+            duration=30,
+            number_of_guests=1, 
             booking_status='Pending',            
             special_requests=special_requests,
             total_price=total_price
@@ -314,3 +315,32 @@ def get_bookings(request):
         return JsonResponse(booking_data)
     else:
         return JsonResponse({'message': 'Invalid request.'}, status=400)
+
+@require_POST
+def add_to_cart(request):
+    if request.method == 'POST':
+        food_id = request.POST.get('food_id')
+        quantity = request.POST.get('quantity') or 1
+        cart = request.session.get(settings.CART_SESSION_ID, {})
+
+        if food_id in cart:
+            cart[food_id] = quantity
+        else:
+            cart[food_id] = quantity
+        request.session[settings.CART_SESSION_ID] = cart 
+        return JsonResponse({'message': 'Food added to cart.', 'cart': cart})
+    return JsonResponse({'message': 'Invalid request.'}, status=400)
+            
+
+@require_POST
+def remote_from_cart(request, food_id):
+    cart = request.session.get(settings.CART_SESSION_ID, {})
+    if food_id in cart:
+        del cart[food_id]
+    request.session[settings.CART_SESSION_ID] = cart
+    return JsonResponse({'message': 'Food removed from cart.', 'cart': cart})
+    
+    
+@require_GET
+def cart_detail(request):
+    return request.session.get(settings.CART_SESSION_ID, {})

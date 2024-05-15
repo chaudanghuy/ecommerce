@@ -23,9 +23,15 @@
                                                     <!-- Tabs navs -->
                                                     <nav>
                                                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#{{ categories.0.filter_code }}" type="button" role="tab" aria-controls="nav-home" aria-selected="true" style="color: #cda45e;">{{ categories.0.name }}</button>
-                                                            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#{{ categories.1.filter_code }}" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" style="color: #cda45e;">{{ categories.1.name }}</button>
-                                                            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#{{ categories.2.filter_code }}" type="button" role="tab" aria-controls="nav-contact" aria-selected="false" style="color: #cda45e;">{{ categories.2.name }}</button>
+                                                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#{{ categories.0.filter_code }}" type="button" role="tab" aria-controls="nav-home" aria-selected="true" style="color: #cda45e;">{{
+                                                                categories.0.name
+                                                                }}</button>
+                                                            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#{{ categories.1.filter_code }}" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" style="color: #cda45e;">{{
+                                                                categories.1.name
+                                                                }}</button>
+                                                            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#{{ categories.2.filter_code }}" type="button" role="tab" aria-controls="nav-contact" aria-selected="false" style="color: #cda45e;">{{
+                                                                categories.2.name
+                                                                }}</button>
                                                         </div>
                                                     </nav>
                                                     <div class="tab-content" id="nav-tabContent">
@@ -47,16 +53,31 @@
                                                                         <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                                                                             <div class="input-group quantity-control row basket-row">
                                                                                 <span class="input-group-btn text-center">
-                                              <button type="button" class="btn text-white btn-default btn-number add-to-basket" data-type="plus" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
-                                                <i class="fa-solid fa-plus"></i>
-                                              </button>
-                                            </span>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        class="btn text-white btn-default btn-number add-to-basket"
+                                                                                        data-type="plus"                                                                                        
+                                                                                        data-food-name={{food.name}}
+                                                                                        data-food-id="{{food.id}}"
+                                                                                        data-food-price={{food.price}}>
+                                                                                        <i
+                                                                                            class="fa-solid fa-plus"></i>
+                                                                                    </button>
+                                                                                </span>
                                                                                 <input disabled type="text" name="quant[1]" class="form-control input-number text-center basket-food" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}} value="0" min="1" max="10">
                                                                                 <span class="input-group-btn text-center">
-                                              <button type="button" class="btn text-white btn-default btn-number reduce-to-basket" data-type="minus" data-food-name={{food.name}} data-field="quant[1]" data-food-id="{{food.id}}" data-food-price={{food.price}}>
-                                                <i class="fa-solid fa-minus"></i>
-                                              </button>
-                                            </span>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        class="btn text-white btn-default btn-number reduce-to-basket"
+                                                                                        data-type="minus"
+                                                                                        data-food-name={{food.name}}
+                                                                                        data-field="quant[1]"
+                                                                                        data-food-id="{{food.id}}"
+                                                                                        data-food-price={{food.price}}>
+                                                                                        <i
+                                                                                            class="fa-solid fa-minus"></i>
+                                                                                    </button>
+                                                                                </span>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
@@ -89,16 +110,32 @@
                                                                         <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                                                                             <div class="input-group quantity-control row basket-row">
                                                                                 <span class="input-group-btn">
-                                              <button type="button" class="btn text-white btn-default btn-number add-to-basket" data-type="plus" data-field="quant[1]" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
-                                                <i class="fa-solid fa-plus"></i>
-                                              </button>
-                                            </span>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        class="btn text-white btn-default btn-number add-to-basket"
+                                                                                        data-type="plus"
+                                                                                        data-field="quant[1]"
+                                                                                        data-food-name={{food.name}}
+                                                                                        data-food-id="{{food.id}}"
+                                                                                        data-food-price={{food.price}}>
+                                                                                        <i
+                                                                                            class="fa-solid fa-plus"></i>
+                                                                                    </button>
+                                                                                </span>
                                                                                 <input disabled type="text" name="quant[1]" class="form-control input-number text-center basket-food" value="0" min="1" max="10" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-value={{food.price}}>
                                                                                 <span class="input-group-btn">
-                                              <button type="button" class="btn text-white btn-default btn-number reduce-to-basket" data-type="minus" data-field="quant[1]" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
-                                                <i class="fa-solid fa-minus"></i>
-                                              </button>
-                                            </span>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        class="btn text-white btn-default btn-number reduce-to-basket"
+                                                                                        data-type="minus"
+                                                                                        data-field="quant[1]"
+                                                                                        data-food-name={{food.name}}
+                                                                                        data-food-id="{{food.id}}"
+                                                                                        data-food-price={{food.price}}>
+                                                                                        <i
+                                                                                            class="fa-solid fa-minus"></i>
+                                                                                    </button>
+                                                                                </span>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
@@ -131,16 +168,32 @@
                                                                         <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                                                                             <div class="input-group quantity-control row basket-row">
                                                                                 <span class="input-group-btn text-center">
-                                              <button type="button" class="btn text-white btn-default btn-number add-to-basket" data-type="plus" data-field="quant[1]" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
-                                                <i class="fa-solid fa-plus"></i>
-                                              </button>
-                                            </span>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        class="btn text-white btn-default btn-number add-to-basket"
+                                                                                        data-type="plus"
+                                                                                        data-field="quant[1]"
+                                                                                        data-food-name={{food.name}}
+                                                                                        data-food-id="{{food.id}}"
+                                                                                        data-food-price={{food.price}}>
+                                                                                        <i
+                                                                                            class="fa-solid fa-plus"></i>
+                                                                                    </button>
+                                                                                </span>
                                                                                 <input disabled type="text" name="quant[1]" class="form-control input-number text-center basket-food" value="0" min="1" max="10" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
                                                                                 <span class="input-group-btn text-center">
-                                              <button type="button" class="btn text-white btn-default btn-number reduce-to-basket" data-type="minus" data-field="quant[1]" data-food-name={{food.name}} data-food-id="{{food.id}}" data-food-price={{food.price}}>
-                                                <i class="fa-solid fa-minus"></i>
-                                              </button>
-                                            </span>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        class="btn text-white btn-default btn-number reduce-to-basket"
+                                                                                        data-type="minus"
+                                                                                        data-field="quant[1]"
+                                                                                        data-food-name={{food.name}}
+                                                                                        data-food-id="{{food.id}}"
+                                                                                        data-food-price={{food.price}}>
+                                                                                        <i
+                                                                                            class="fa-solid fa-minus"></i>
+                                                                                    </button>
+                                                                                </span>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
@@ -169,24 +222,30 @@
                                                         <h5><span class="total-basket-items"></span></h5>
                                                     </div>
                                                     <div class="d-flex justify-content-between mb-5">
-                                                        <h5 class="text-uppercase">Total price</h5>
+                                                        <h5 class="text-uppercase">Total price
+                                                        </h5>
                                                         <h5><sup class="total-basket-total"></sup></h5>
                                                     </div>
 
                                                     <hr class="my-4">
 
-                                                    <h5 class="text-uppercase mb-3">Delivery Method</h5>
+                                                    <h5 class="text-uppercase mb-3">Delivery Method
+                                                    </h5>
 
                                                     <div class="mb-4 pb-2">
                                                         <select id="order-delivery-method" class='form-control'>
-                                <option value="none">--Choose--</option>
-                                <option value="pickup-order">Pickup</option>
-                                <option value="delivery-order">Delivery</option>                              
-                              </select>
+                                                            <option
+                                                                value="none">--Choose--</option>
+                                                            <option
+                                                                value="pickup-order">Pickup</option>
+                                                            <option
+                                                                value="delivery-order">Delivery</option>
+                                                        </select>
                                                     </div>
 
                                                     <div id="pickup-method" class="d-none">
-                                                        <h5 class="text-uppercase mb-3">Pickup Date</h5>
+                                                        <h5 class="text-uppercase mb-3">Pickup Date
+                                                        </h5>
 
                                                         <div class="mb-5">
                                                             <div data-mdb-input-init class="form-outline">
@@ -194,44 +253,51 @@
                                                             </div>
                                                         </div>
 
-                                                        <h5 class="text-uppercase mb-3">Contact Info</h5>
+                                                        <h5 class="text-uppercase mb-3">Contact Info
+                                                        </h5>
 
                                                         <div class="mb-2">
                                                             <div data-mdb-input-init class="form-outline">
                                                                 <input type="email" id="pickup-email" class="form-control form-control-lg" />
-                                                                <label class="form-label" for="form3Examplea2">Your email</label>
+                                                                <label class="form-label" for="form3Examplea2">Your
+                                                                    email</label>
                                                             </div>
                                                         </div>
 
                                                         <div class="mb-2">
                                                             <div data-mdb-input-init class="form-outline">
                                                                 <input type="number" id="pickup-phone" class="form-control form-control-lg" />
-                                                                <label class="form-label" for="form3Examplea2">Your phone</label>
+                                                                <label class="form-label" for="form3Examplea2">Your
+                                                                    phone</label>
                                                             </div>
                                                         </div>
                                                     </div>
 
                                                     <div id="delivery-method" class="d-none">
-                                                        <h5 class="text-uppercase mb-3">Delivery Address</h5>
+                                                        <h5 class="text-uppercase mb-3">Delivery Address
+                                                        </h5>
 
                                                         <div class="mb-2">
                                                             <div data-mdb-input-init class="form-outline">
                                                                 <input type="text" id="delivery-address" class="form-control form-control-lg" />
-                                                                <label class="form-label" for="form3Examplea2">Your address</label>
+                                                                <label class="form-label" for="form3Examplea2">Your
+                                                                    address</label>
                                                             </div>
                                                         </div>
 
                                                         <div class="mb-2">
                                                             <div data-mdb-input-init class="form-outline">
                                                                 <input type="email" id="delivery-email" class="form-control form-control-lg" />
-                                                                <label class="form-label" for="form3Examplea2">Your email</label>
+                                                                <label class="form-label" for="form3Examplea2">Your
+                                                                    email</label>
                                                             </div>
                                                         </div>
 
                                                         <div class="mb-2">
                                                             <div data-mdb-input-init class="form-outline">
                                                                 <input type="number" id="delivery-phone" class="form-control form-control-lg" />
-                                                                <label class="form-label" for="form3Examplea2">Your phone</label>
+                                                                <label class="form-label" for="form3Examplea2">Your
+                                                                    phone</label>
                                                             </div>
                                                         </div>
                                                     </div>

@@ -2,6 +2,17 @@ var container = $('.book-a-table form').length > 0 ? $('.book-a-table form').par
 var basket = [];
 
 $(function() {
+    if ($('.product-list').length > 0) {
+        buildProductListHtmlFromBasket();
+    }
+
+    if ($('.book-a-table').length > 0) {
+        var basket = JSON.parse(localStorage.getItem('basket'));
+        if (!basket) {
+            window.location.href = '/order';
+        }
+    }
+
     $('#datepicker').datepicker({
         format: 'yyyy-mm-dd',
         container: container,
@@ -41,6 +52,7 @@ $(function() {
     $('#order-success-modal').on('hidden.bs.modal', function(e) {
         // Clear session storage for basket
         localStorage.removeItem('basket');
+        window.location.href = '/';
     });
 });
 
@@ -237,9 +249,19 @@ $('.add-to-basket').on('click', function(e) {
     var foodId = $(this).data('food-id');
     var basket = JSON.parse(localStorage.getItem('basket')) || {};
     if (!basket.hasOwnProperty(foodId)) {
-        basket[foodId] = { total: 1, price: $(this).data('food-price'), name: $(this).data('food-name') };
+        basket[foodId] = {
+            total: 1,
+            price: $(this).data('food-price'),
+            name: $(this).data('food-name'),
+            image: $(this).data('food-image')
+        };
     } else {
-        basket[foodId] = { total: basket[foodId].total + 1, price: $(this).data('food-price'), name: $(this).data('food-name') };
+        basket[foodId] = {
+            total: basket[foodId].total + 1,
+            price: $(this).data('food-price'),
+            name: $(this).data('food-name'),
+            image: $(this).data('food-image')
+        };
     }
 
     $('.basket-food').each(function() {
@@ -261,7 +283,12 @@ $('.reduce-to-basket').on('click', function(e) {
     if (basket.hasOwnProperty(foodId)) {
         if (basket[foodId].total > 1) {
             basketValue = basket[foodId] - 1
-            basket[foodId] = { total: basketValue, price: $(this).data('food-price'), name: $(this).data('food-name') };
+            basket[foodId] = {
+                total: basketValue,
+                price: $(this).data('food-price'),
+                name: $(this).data('food-name'),
+                image: $(this).data('food-image')
+            };
         } else {
             basketValue = 0;
             delete basket[foodId];
@@ -279,6 +306,10 @@ $('.reduce-to-basket').on('click', function(e) {
     updateBasketTotal();
 });
 
+$('#my-cart').on('click', function() {
+    window.location.href = '/order-book'
+});
+
 function updateBasketTotal() {
     var basket = JSON.parse(localStorage.getItem('basket')) || {};
     var total = 0;
@@ -288,7 +319,12 @@ function updateBasketTotal() {
         total += basket[foodId].total * basket[foodId].price;
     }
     $('.total-basket-items').text(count);
-    $('.total-basket-total').text(total);
+    $('.total-basket-total').text(total.toFixed(2));
+
+    if (count > 0) {
+        $('#my-cart').removeClass('d-none');
+        updateCartCount(count);
+    }
 }
 
 function loadBasket() {
@@ -306,77 +342,75 @@ function loadBasket() {
     updateBasketTotal();
 }
 
-loadBasket();
-
-$('#order-finish').click(function() {
+$('#order-finish').on('click', function(e) {
+    e.preventDefault();
     var basket = JSON.parse(localStorage.getItem('basket'));
     if (!basket) {
-        alert('Your basket is empty');
+        window.location.href = '/order';
+    }
+
+    var deliveryMethod = 'pickup-order';
+
+    var yourName = $('#fullname').val();
+    if (!yourName) {
+        $('.error-message').text('Please enter your name').show();
         return;
     }
 
-
-    var deliveryMethod = $('#order-delivery-method').val();
-    if (deliveryMethod == 'none') {
-        alert('Please select delivery method');
+    var email = $('#email').val();
+    if (!email) {
+        $('.error-message').text('Please enter your email').show();
+        return;
+    }
+    var phone = $('#phone').val();
+    if (!phone) {
+        $('.error-message').text('Please enter your phone').show();
         return;
     }
 
-    if (deliveryMethod == 'delivery-order') {
-        var address = $('#delivery-address').val();
-        if (!address) {
-            alert('Please enter your delivery address');
-            return;
-        }
-
-        var email = $('#delivery-email').val();
-        if (!email) {
-            alert('Please enter your email');
-            return;
-        }
-        var phone = $('#delivery-phone').val();
-        if (!phone) {
-            alert('Please enter your phone number');
-            return;
-        }
-    } else if (deliveryMethod == 'pickup-order') {
-        var date = $('#pickup-date').val();
-        if (!date && deliveryMethod == 'pickup-order') {
-            alert('Please select pickup date');
-            return;
-        }
-        var email = $('#pickup-email').val();
-        if (!email) {
-            alert('Please enter your email');
-            return;
-        }
-        var phone = $('#pickup-phone').val();
-        if (!phone) {
-            alert('Please enter your phone number');
-            return;
-        }
+    var pickupDate = $('#datepicker').val();
+    if (!pickupDate) {
+        $('.error-message').text('Please select pickup date').show();
+        return;
+    }
+    var pickupTime = $('#timePicker').val();
+    if (!pickupTime) {
+        $('.error-message').text('Please select pickup time').show();
+        return;
     }
 
+    var specialRequest = $('#special_requests').val();
+    if (!specialRequest) {
+        specialRequest = "No special request";
+    }
+
+    $('.loading').show();
 
     $.ajax({
         url: '/api/order',
         data: {
             basket: JSON.stringify(basket),
-            date: date,
             email: email,
-            address: address,
+            address: deliveryMethod,
             phone: phone,
-            special_requests: deliveryMethod,
+            date: pickupDate,
+            time: pickupTime,
+            special_requests: specialRequest,
             csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
         },
         method: 'POST',
         success: function(response) {
+            $('.loading').hide();
+            $('.error-message').hide();
+            $('.order-pickup-time').html(pickupTime);
             loadOrderItemtoSuccessModal();
-            $('#foodModal').modal('hide');
+            // $('#foodModal').modal('hide');
             $('#order-success-modal').modal('show');
         },
         error: function() {
-            alert('Something went wrong. Please try again later.');
+            $('.loading').hide();
+            $('.error-message').hide();
+            $('.error-message').text('Something went wrong. Please try again later.').show();
         },
     });
 })
@@ -416,19 +450,112 @@ var cartCount = 0; // Initialize cart count
 
 window.addEventListener('scroll', function() {
     var floatingCart = document.querySelector('.floating-cart');
-    if (window.scrollY > 100) { // Change 100 to your desired scroll position
-        floatingCart.style.opacity = '1';
-    } else {
-        floatingCart.style.opacity = '0';
-    }
+    floatingCart.style.opacity = '1';
 });
 
 // Update cart count function
 function updateCartCount(count) {
     var cartCountSpan = document.querySelector('.cart-count');
-    cartCount = count;
-    cartCountSpan.textContent = cartCount;
+    cartCountSpan.textContent = count;
 }
 
-// Example usage:
-updateCartCount(3); // Update cart count to 3
+function buildProductListHtmlFromBasket() {
+    var basket = JSON.parse(localStorage.getItem('basket'));
+    if (!basket) {
+        window.location.href = '/order';
+    }
+    var productList = $('.product-list');
+    for (var foodId in basket) {
+        var food = basket[foodId];
+        var productHtml = `
+            <div class="product-item d-flex align-items-center">
+                <a href="${food.image}" data-lightbox="image-set" data-title="${food.name}">
+                    <img src="${food.image}" alt="${food.name}" class="menu-img">
+                </a>
+                <div class="details col-md-3 col-lg-3 col-xl-3">
+                    <h5>${food.name}</h5>
+                    <p>Some details about the product.</p>
+                </div>
+                <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                    <div class="input-group quantity-control row basket-row">
+                        <span class="input-group-btn text-center">
+                        <button
+                            type="button"
+                            class="btn text-white btn-default btn-number add-to-basket"
+                            data-type="plus"
+                            data-food-image="${food.image}"
+                            data-food-name="${food.name}"
+                            data-food-id="${foodId}"
+                            data-food-price="${food.price}">
+                        <i
+                            class="fa-solid fa-plus"></i>
+                        </button>
+                        </span>
+                        <input 
+                            disabled 
+                            type="text" 
+                            name="quant[1]" 
+                            class="form-control input-number text-center basket-food" 
+                            data-food-name="${food.name}"
+                            data-food-image="${food.image}"
+                            data-food-id="${foodId}"
+                            data-food-price="${food.price}"
+                            value="${food.total}" 
+                            min="1" 
+                            max="10"
+                        >
+                        <span class="input-group-btn text-center">
+                        <button
+                            type="button"
+                            class="btn text-white btn-default btn-number reduce-to-basket"
+                            data-type="minus"
+                            data-food-image="${food.image}"
+                            data-food-name="${food.name}"
+                            data-food-id="${foodId}"
+                            data-food-price="${food.price}">
+                        <i
+                            class="fa-solid fa-minus"></i>
+                        </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="price">${food.price}</div>                
+            </div>`;
+        productList.append(productHtml);
+    }
+
+    $('.product-list').on('click', '.add-to-basket', function(e) {
+        var foodId = $(this).data('food-id');
+        var basket = JSON.parse(localStorage.getItem('basket')) || {};
+        if (!basket.hasOwnProperty(foodId)) {
+            basket[foodId] = {
+                total: 1,
+                price: $(this).data('food-price'),
+                name: $(this).data('food-name'),
+                image: $(this).data('food-image')
+            };
+        } else {
+            basket[foodId] = {
+                total: basket[foodId].total + 1,
+                price: $(this).data('food-price'),
+                name: $(this).data('food-name'),
+                image: $(this).data('food-image')
+            };
+        }
+
+        $('.basket-food').each(function() {
+            var el = $(this);
+            var foodIdFromElement = el.data('food-id');
+            if (foodIdFromElement === foodId) {
+                el.val(basket[foodId].total);
+            }
+        });
+
+        localStorage.setItem('basket', JSON.stringify(basket));
+        updateBasketTotal();
+    });
+
+    updateBasketTotal();
+}
+
+loadBasket();

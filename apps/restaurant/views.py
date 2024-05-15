@@ -43,10 +43,13 @@ def customer_order(request):
     return render(request, 'themes/'+settings.THEME+'/order.html', {'foods': foods, 'restaurant': restaurant})
 
 def customer_order_book(request):
-    return render(request, 'themes/'+settings.THEME+'/order_book.html')
+    restaurant = Restaurant.objects.all()[0]
+    foods = Food.objects.filter(availability='available')  # Filter for availability only
+    return render(request, 'themes/'+settings.THEME+'/order_book.html', {'foods': foods, 'restaurant': restaurant})
 
 def customer_order_confirm(request):
-    return render(request, 'themes/'+settings.THEME+'/order_confirm.html')
+    restaurant = Restaurant.objects.all()[0]
+    return render(request, 'themes/'+settings.THEME+'/order_confirmation.html', {'restaurant': restaurant})
 
 # Web 
 @require_POST
@@ -73,7 +76,7 @@ def customer_book_process(request):
         # Get all bookings for the given date
         bookings = Booking.objects.filter(
             booking_date=booking_date.date()
-        ).exclude(special_requests='pickup-order').exclude(special_requests='delivery-order')    
+        ).exclude(customer__address__icontains='pickup-order').exclude(special_requests='delivery-order')    
         
         bookings_in_slot = []
         for booking in bookings:
@@ -173,7 +176,7 @@ def admin_calendar(request):
     # Get all bookings for the given date
     bookings = Booking.objects.filter(
         booking_date=booking_date.date()
-    ).exclude(special_requests='pickup-order').exclude(special_requests='delivery-order')
+    ).exclude(customer__address__icontains='pickup-order').exclude(special_requests='delivery-order')
 
     # Create a list of all booked time slots
     booked_tables = []
@@ -246,7 +249,7 @@ def admin_calendar(request):
     
     booking_lists = Booking.objects.filter(
         booking_date=booking_date.date()
-    ).exclude(special_requests='pickup-order').exclude(special_requests='delivery-order')
+    ).exclude(customer__address__icontains='pickup-order').exclude(special_requests='delivery-order')
 
     return render(request, 'admin/admin_calendar.html', {'available_time_slots': available_time_slots, 'tables': tables, 'date': date, 'booked_tables': booked_tables, 'booking_lists': booking_lists})
 
