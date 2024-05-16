@@ -258,6 +258,8 @@ def order(request):
             
         customer = Customer.objects.get_or_create(user=user, address=address, phone=phone)[0]
         
+        booking_time = (datetime.strptime(time, '%H:%M') + timedelta(minutes=30)).strftime('%H:%M')        
+
         booking = Booking.objects.create(
             customer=customer,
             table=MyTable.objects.first(),
@@ -279,7 +281,7 @@ def order(request):
                 price=food.price
             )
 
-        return JsonResponse({'message': 'Booking ordered successfully.'})
+        return JsonResponse({'message': 'Booking ordered successfully.', 'booking_time': booking_time})
     else:
         return JsonResponse({'message': 'Invalid request.'}, status=400)
 

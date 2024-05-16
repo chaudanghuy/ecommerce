@@ -8,7 +8,7 @@ $(function() {
 
     if ($('.book-a-table').length > 0) {
         var basket = JSON.parse(localStorage.getItem('basket'));
-        if (!basket) {
+        if (!basket || Object.keys(basket).length === 0) {
             window.location.href = '/order';
         }
     }
@@ -402,7 +402,7 @@ $('#order-finish').on('click', function(e) {
         success: function(response) {
             $('.loading').hide();
             $('.error-message').hide();
-            $('.order-pickup-time').html(pickupTime);
+            $('.order-pickup-time').html(response.booking_time);
             loadOrderItemtoSuccessModal();
             // $('#foodModal').modal('hide');
             $('#order-success-modal').modal('show');
@@ -461,7 +461,7 @@ function updateCartCount(count) {
 
 function buildProductListHtmlFromBasket() {
     var basket = JSON.parse(localStorage.getItem('basket'));
-    if (!basket) {
+    if (!basket || Object.keys(basket).length === 0) {
         window.location.href = '/order';
     }
     var productList = $('.product-list');
@@ -551,6 +551,37 @@ function buildProductListHtmlFromBasket() {
             }
         });
 
+        localStorage.setItem('basket', JSON.stringify(basket));
+        updateBasketTotal();
+    });
+
+    $('.product-list').on('click', '.reduce-to-basket', function(e) {
+        var foodId = $(this).data('food-id');
+        var basket = JSON.parse(localStorage.getItem('basket')) || {};
+        let basketValue = basket[foodId];
+        if (basket.hasOwnProperty(foodId)) {
+            if (basket[foodId].total > 1) {
+                basketValue = basket[foodId] - 1
+                basket[foodId] = {
+                    total: basketValue,
+                    price: $(this).data('food-price'),
+                    name: $(this).data('food-name'),
+                    image: $(this).data('food-image')
+                };
+            } else {
+                basketValue = 0;
+                delete basket[foodId];
+                window.location.reload();
+            }
+        }
+
+        $('.basket-food').each(function() {
+            var el = $(this);
+            var foodIdFromElement = el.data('food-id');
+            if (foodIdFromElement === foodId) {
+                el.val(basketValue);
+            }
+        });
         localStorage.setItem('basket', JSON.stringify(basket));
         updateBasketTotal();
     });

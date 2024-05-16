@@ -35,6 +35,7 @@
                     </div>
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
+                        <input type="hidden" id="food_id" name="food_id" value="{{food.id}}">
                         <div class="form-group row">
                             <label class="col-sm-12 col-md-2 col-form-label">Name</label>
                             <div class="col-sm-12 col-md-10">
@@ -102,7 +103,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="btn-list">
-                                <button type="submit" id="add-food-btn" class="btn btn-primary btn-lg text-center">Save</button>
+                                <button type="submit" id="edit-food-btn" class="btn btn-primary btn-lg text-center">Save</button>
                             </div>
                         </div>
                     </form>
