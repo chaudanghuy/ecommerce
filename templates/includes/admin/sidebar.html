@@ -2,7 +2,7 @@
 
 <div class="left-side-bar">
     <div class="brand-logo">
-        <a href="index.html">
+        <a href="{% url 'profile' %}">
             <img src="{% static '/demo1/assets/img/logo.png' %}" alt="" class="dark-logo" style="height: 50px;">
             <img src="{% static '//demo1/assets/img/logo.png' %}" alt="" class="light-logo" style="height: 50px;">
         </a>
@@ -29,17 +29,17 @@
                     </a>
                     <ul class="submenu">
                         <li><a href={% url 'menu' %}>Foods</a></li>
-                        <li><a href={% url 'menu-add' %}>Add New Food</a></li>                        
+                        <li><a href={% url 'menu-add' %}>Add New Food</a></li>
                     </ul>
                 </li>
                 <li>
                     <a href={% url 'bookings' %} class="dropdown-toggle no-arrow">
                         <span class="micon dw dw-list3"></span><span class="mtext">Menu Order</span>
                     </a>
-                </li>                 
+                </li>
                 <li>
                     <div class="dropdown-divider"></div>
-                </li>                
+                </li>
             </ul>
         </div>
     </div>

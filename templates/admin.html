@@ -1,13 +1,12 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <!-- Basic Page Info -->
     <meta charset="utf-8" />
     <title>
-      {% block title %}
-
-      {% endblock %}
+        {% block title %} {% endblock %}
     </title>
 
     <!-- Site favicon -->
@@ -31,12 +30,13 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <!-- Link Bootstrap Datepicker CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
-  </head>
+    <link rel="stylesheet" href="{% static '/admin/css/admin.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
+</head>
 
-  <body>
-    {% block content %}
-
-    {% endblock %}
+<body>
+    {% block content %} {% endblock %}
     <!-- js -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{% static '/admin/vendors/scripts/core.js' %}"></script>
@@ -64,5 +64,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="{% static '/admin/js/admin.js' %}"></script>
-  </body>
+</body>
+
 </html>

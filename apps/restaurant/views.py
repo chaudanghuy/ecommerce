@@ -220,9 +220,7 @@ def admin_calendar(request):
         table_book_total_guests = [slot['number_of_guests'] for slot in booked_time_slots if
                                    slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]         
         table_book_name = [slot['booking_name'] for slot in booked_time_slots if
-                           slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]  
-    
-        print(table_book_phones)
+                           slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]          
                     
         if not slot_already_booked:
             available_time_slots.append({
@@ -251,7 +249,109 @@ def admin_calendar(request):
         booking_date=booking_date.date()
     ).exclude(customer__address__icontains='pickup-order').exclude(special_requests='delivery-order')
 
-    return render(request, 'admin/admin_calendar.html', {'available_time_slots': available_time_slots, 'tables': tables, 'date': date, 'booked_tables': booked_tables, 'booking_lists': booking_lists})
+    return render(request, 'admin/admin_booking_tables.html', {'available_time_slots': available_time_slots, 'tables': tables, 'date': date, 'booked_tables': booked_tables, 'booking_lists': booking_lists})
+
+@login_required
+def admin_booking_tables(request):
+    date = request.GET.get('date')
+    
+    try:
+        date = datetime.strptime(date, '%Y-%m-%d').strftime('%Y-%m-%d')
+    except (TypeError, ValueError):
+        try:
+            date = datetime.strptime(date, '%m/%d/%Y').strftime('%Y-%m-%d')
+        except (TypeError, ValueError):
+            date = datetime.today().strftime('%Y-%m-%d')
+    
+    if not date:
+        date = datetime.today().strftime('%Y-%m-%d')
+
+    if not date:
+        return JsonResponse({'message': 'Date is required.'}, status=400)
+
+    try:
+        booking_date = datetime.strptime(date, '%Y-%m-%d')
+    except ValueError:
+        return JsonResponse({'message': 'Invalid date format. Please provide date in YYYY-MM-DD format.'}, status=400)
+
+    # Get all bookings for the given date
+    bookings = Booking.objects.filter(
+        booking_date=booking_date.date()
+    )  
+
+    # Create a list of all booked time slots
+    booked_tables = []
+    booked_time_slots = []
+    for booking in bookings:
+        start_time = booking.booking_time
+        end_time = datetime.strptime(start_time, '%H:%M') + timedelta(minutes=booking.duration)
+        booked_time_slots.append({
+            'start_time': start_time,  # Format time in AM/PM
+            'end_time': end_time.strftime('%H:%M'),
+            'total_customers': booking.number_of_guests,
+            'table': booking.table.table_number,
+            'booking_code': booking.booking_code,
+            'booking_phone': booking.table.table_number + '-' + str(booking.customer.phone),
+            'number_of_guests': booking.table.table_number + '-' + str(booking.number_of_guests),
+            'booking_name': booking.table.table_number + '-' +  str(booking.customer.user.email)
+        })
+
+    # Generate a list of available time slots based on total people
+    available_time_slots = []
+    current_time = datetime(booking_date.year, booking_date.month, booking_date.day, 17, 0)  # Assuming restaurant opens at 17:00 PM
+    closing_time = datetime(booking_date.year, booking_date.month, booking_date.day, 22, 0)  # Assuming restaurant closes at 10:00 PM
+
+    table_codes_with_id = []
+    while current_time < closing_time:
+        slot_start_time = current_time
+        slot_end_time = current_time + timedelta(minutes=60)  # Assuming each slot is 60 minutes
+        
+        slot_already_booked = any(
+            slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']
+            for slot in booked_time_slots
+        )
+
+        
+        table_booked = [slot['table'] for slot in booked_time_slots if
+                        slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]
+        table_codes = [slot['booking_code'] for slot in booked_time_slots if
+                       slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]
+        table_book_phones = [slot['booking_phone'] for slot in booked_time_slots if
+                             slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]
+        table_book_total_guests = [slot['number_of_guests'] for slot in booked_time_slots if
+                                   slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]         
+        table_book_name = [slot['booking_name'] for slot in booked_time_slots if
+                           slot['start_time'] <= slot_start_time.strftime('%H:%M') <= slot['end_time']]  
+    
+        print(table_book_phones)
+                    
+        if not slot_already_booked:
+            available_time_slots.append({
+                'start_time': slot_start_time.strftime('%H:%M'),
+                'end_time': slot_end_time.strftime('%H:%M'),
+                'flag': 'not-booked',
+                'booking_phone': slot_start_time.strftime('%H:%M')
+            })
+        else:
+            available_time_slots.append({
+                'start_time': slot_start_time.strftime('%H:%M'),
+                'end_time': slot_end_time.strftime('%H:%M'),
+                'flag': 'booked',
+                'table': table_booked,
+                'booking_code': table_codes,
+                'booking_phone':table_book_phones,
+                'number_of_guests': table_book_total_guests,
+                'table_book_name': table_book_name
+            })
+
+        current_time += timedelta(minutes=15)  # Assuming each slot is 60 minutes
+
+    tables = MyTable.objects.all()
+    
+    booking_lists = Booking.objects.order_by('-id')
+
+    booking_date_show = booking_date.strftime('%Y-%m-%d')
+    return render(request, 'admin/admin_booking_tables.html', {'available_time_slots': available_time_slots, 'tables': tables, 'date': date, 'booked_tables': booked_tables, 'booking_lists': booking_lists, 'booking_date': booking_date_show})
 
 @login_required
 def admin_profile(request):

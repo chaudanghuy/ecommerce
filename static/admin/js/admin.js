@@ -121,6 +121,11 @@ $('#find-bookings').on('click', function() {
     window.location.href = url
 })
 
+$('#booking_date_reload').on('change', function() {
+    var url = window.location.origin + '/accounts/calendar?date=' + $(this).val()
+    window.location.href = url
+})
+
 function mergeCells() {
     $('#booking-table tr').each(function() {
         var prevBookingId = null
@@ -183,8 +188,7 @@ $('.show-booking-detail').click(function() {
 
             $('#customer-email').html(response.customer_email)
             $('#customer-phone').html(response.customer_phone)
-            $('#customer-address').html(response.customer_address)
-            $('#customer-delivery-type').html(response.special_requests)
+            $('#customer-special-request').html(response.special_requests)
 
             $('#bookingModal').modal('show')
         }

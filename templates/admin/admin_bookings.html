@@ -15,9 +15,9 @@
                         <nav aria-label="breadcrumb" role="navigation">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="{% url 'manage' %}">Home</a>
+                                    <a href="{% url 'profile' %}">Home</a>
                                 </li>
-                                <li class="breadcrumb-item active" aria-current="page">Bookings</li>
+                                <li class="breadcrumb-item active" aria-current="page">Orders</li>
                             </ol>
                         </nav>
                     </div>
@@ -26,15 +26,14 @@
             <!-- Simple Datatable start -->
             <div class="card-box mb-30">
                 <div class="pd-20">
-                    <h4 class="text-blue h4">Bookings</h4>
+                    <h4 class="text-blue h4">Orders</h4>
                 </div>
                 <div class="pb-20">
                     <table class="table hover multiple-select-row data-table-export nowrap">
                         <thead>
                             <tr>
-                                <th class="table-plus datatable-nosort">Booking Code</th>
-                                <th>Booking Date</th>
-                                <th>Booking Type</th>
+                                <th>Date</th>
+                                <th>Sepcial Request</th>
                                 <th>Total Price</th>
                                 <th class="datatable-nosort">Status</th>
                                 <th class="datatable-nosort">Action</th>
@@ -43,8 +42,7 @@
                         <tbody>
                             {% for booking in bookings %} {% if booking.customer.address == 'pickup-order' %}
                             <tr>
-                                <td class="table-plus">{{ booking.booking_code }}</td>
-                                <th>{{ booking.booking_date }}</th>
+                                <th>{{ booking.booking_date }} - {{ booking.booking_time }}</th>
                                 <td>{{ booking.special_requests }}</td>
                                 <td>{{ booking.total_price }}</td>
                                 <td>{{ booking.booking_status }}</td>
@@ -73,11 +71,10 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Booking Detail</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Order Detail</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body" id="bookingModalBody">
-                <h6>Customer Information</h6>
                 <div id="customerInfo">
                     <ul>
                         <li>
@@ -87,10 +84,7 @@
                             <strong>Phone:</strong> <span id="customer-phone"></span>
                         </li>
                         <li>
-                            <strong>Address:</strong> <span id="customer-address"></span>
-                        </li>
-                        <li>
-                            <strong>Delivery Type:</strong> <span id="customer-delivery-type"></span>
+                            <strong>Special Request:</strong> <span id="customer-special-request"></span>
                         </li>
                     </ul>
                 </div>

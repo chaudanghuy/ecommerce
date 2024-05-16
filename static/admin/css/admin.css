@@ -1,0 +1,7 @@
+th:first-child,
+td:first-child {
+    position: sticky;
+    left: 0px;
+    background-color: #2A2730;
+    color: white;
+}

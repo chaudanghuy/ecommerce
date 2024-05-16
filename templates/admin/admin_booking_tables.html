@@ -1,0 +1,108 @@
+<!-- profile.html -->
+{% extends 'admin.html' %} 
+
+{% load static %} 
+
+{% load custom_filters %} 
+
+{% block title %} 
+Bookings Management 
+{% endblock %} 
+
+{% block content %} 
+
+{% include '../includes/admin/loader.html' %} 
+
+{% include '../includes/admin/header.html' %} 
+
+{% include '../includes/admin/layout_setting.html' %} 
+
+{% include '../includes/admin/sidebar.html' %}
+<div class="mobile-menu-overlay"></div>
+
+<div class="main-container">
+    <div class="pd-ltr-20 xs-pd-20-10">
+        <div class="min-height-200px">
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="title">
+                            <h4>Menu</h4>
+                        </div>
+                        <nav aria-label="breadcrumb" role="navigation">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="{% url 'profile' %}">Home</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">Bookings</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!-- Simple Datatable start -->
+            <div class="card-box mb-30">
+                <div class="pd-20">
+                    <h4 class="text-blue h4">Bookings</h4>
+					<div class="text-center">
+						<input id="booking_date_reload" type="date" class="form-control" value="{{ booking_date }}"/>
+					</div>
+                </div>
+                <div class="pb-20">
+                    <table id="booking-table" class="table table-hover table-bordered table-responsive">
+                  <tr>
+                    <th class="text-center">
+                      <i class="far fa-calendar-check"></i>                      
+                    </th>
+                    {% for booking_time in available_time_slots %}
+                      <th>{{booking_time.start_time}}</th>
+                    {% endfor %}
+                  </tr>
+                  {% for table in tables %}
+                  <tr>
+                    <td class="text-nowrap">Table {{ table.table_number }}</td>
+                    {% for booking_time in available_time_slots %}
+                      <td style="background-color: {% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}powderblue;{% endif %}" 
+                          data-booking-id=
+                          {% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}                            
+                            {% for book_phone in booking_time.booking_phone %}
+                              {% with parts=book_phone|split:"-"  %}                              
+                                {% if parts.0 == table.table_number %}                                                          
+                                {{parts.1}}
+                                {% endif %}                              
+                              {% endwith %}                            
+                            {% endfor %}  
+                          {% else %}
+                            {{booking_time.start_time}}
+                          {% endif %}>                          
+                        {% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}                           
+                          {% for book_phone in booking_time.booking_phone %}
+                            {% with parts=book_phone|split:"-"  %}                              
+                              {% if parts.0 == table.table_number %}                                                          
+                                <small id="myInput">{{parts.1}}</small>
+                              {% endif %}                              
+                            {% endwith %}                            
+                          {% endfor %}   
+                          -                                                                           
+                          {% for book_email in booking_time.table_book_name %}
+                            {% with parts=book_email|split:"-"  %}                              
+                              {% if parts.0 == table.table_number %}                                                          
+                                <small>{{parts.1}}</small>
+                              {% endif %}                              
+                            {% endwith %}                            
+                          {% endfor %}                                                      
+                            
+                      {% endif %}
+                      </td>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </table>
+                </div>
+            </div>
+            <!-- Simple Datatable End -->
+        </div>
+        {% include '../includes/admin/footer.html' %}
+    </div>
+</div>
+{% endblock %}

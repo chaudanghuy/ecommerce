@@ -35,7 +35,7 @@ urlpatterns = [
     # accounts
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/profile/', views.admin_profile, name='profile'),
-    path('accounts/calendar', views.admin_calendar, name='calendar'),
+    path('accounts/calendar', views.admin_booking_tables, name='calendar'),
     path('accounts/settings/', views.admin_setting, name='setting'),    
     path('accounts/menu', views.admin_menu, name='menu'),
     path('accounts/menu-add', views.admin_menu_add, name='menu-add'),
