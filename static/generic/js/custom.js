@@ -6,7 +6,7 @@ $(function() {
         buildProductListHtmlFromBasket();
     }
 
-    if ($('.book-a-table').length > 0) {
+    if ($('#order-a-table').length > 0) {
         var basket = JSON.parse(localStorage.getItem('basket'));
         if (!basket || Object.keys(basket).length === 0) {
             window.location.href = '/order';

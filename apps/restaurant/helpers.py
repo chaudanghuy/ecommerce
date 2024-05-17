@@ -24,7 +24,7 @@ def book_calender_api(booking_date, booking_time, duration, customer_name, custo
     end_datetime = start_datetime + timedelta(minutes=duration)
 
     new_event = {
-        "summary": f'Restaurant Booking for {customer_name}',
+        "summary": f'{customer_name} - {total_people} People',
         "location": f'{restaurant_address}',
         "description": f'Phone: {customer_phone} - {total_people} People - Time: {booking_time} - {special_request}',
         "start": {
