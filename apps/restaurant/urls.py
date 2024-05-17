@@ -16,9 +16,9 @@ urlpatterns = [
     path('order-book', views.customer_order_book, name='order-book'),
     path('order-confirm', views.customer_order_confirm, name='order-confirm'),
 
-    # Account
+    # Logged-in Auth
     path('admin/', RedirectView.as_view(url='/accounts/login'), name='manage'),
-    path('accounts', RedirectView.as_view(url='/accounts/login'), name='login'),
+    path('accounts/login/', views.admin_login, name='login'),
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
     
     # Api

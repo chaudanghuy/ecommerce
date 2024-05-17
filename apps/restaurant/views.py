@@ -17,6 +17,8 @@ from . import helpers
 from django.shortcuts import get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import FoodForm
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.forms import AuthenticationForm
 
 # Frontend
 def index(request):
@@ -150,6 +152,20 @@ def customer_book_process(request):
     return HttpResponse('Your booking request was sent. We will call back or send an Email to confirm your reservation. Thank you!', status=201)
 
 # Admin
+
+def admin_login(request):
+    if request.user.is_authenticated:
+        return redirect('profile')
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            auth_login(request, form.get_user())
+            return redirect('profile')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'registration/login.html', {'form': form})
+
+
 @login_required
 def admin_calendar(request):
     date = request.GET.get('date')
