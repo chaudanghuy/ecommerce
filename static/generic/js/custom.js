@@ -473,8 +473,7 @@ function buildProductListHtmlFromBasket() {
                     <img src="${food.image}" alt="${food.name}" class="menu-img">
                 </a>
                 <div class="details col-md-3 col-lg-3 col-xl-3">
-                    <h5>${food.name}</h5>
-                    <p>Some details about the product.</p>
+                    <h5>${food.name}</h5>                    
                 </div>
                 <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                     <div class="input-group quantity-control row basket-row">

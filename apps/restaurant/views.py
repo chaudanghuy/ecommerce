@@ -293,11 +293,17 @@ def admin_booking_tables(request):
     # Get all bookings for the given date
     bookings = Booking.objects.filter(
         booking_date=booking_date.date()
-    )  
+    ).exclude(customer__address__icontains='pickup-order')  
+
+    # Get orders
+    orders = Booking.objects.filter(
+        booking_date=booking_date.date()
+    ).filter(customer__address__icontains='pickup-order')
 
     # Create a list of all booked time slots
     booked_tables = []
     booked_time_slots = []
+    order_time_slots = []
     for booking in bookings:
         start_time = booking.booking_time
         end_time = datetime.strptime(start_time, '%H:%M') + timedelta(minutes=booking.duration)

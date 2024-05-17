@@ -40,10 +40,12 @@ Bookings Management
                     </div>
                 </div>
             </div>
-            <!-- Simple Datatable start -->
+			
+			<div class="card-box mb-30">
+			<!-- Bookings -->
             <div class="card-box mb-30">
                 <div class="pd-20">
-                    <h4 class="text-blue h4">Bookings</h4>
+                    <h4 class="text-blue h4">Bookings</h4>		
 					<div class="text-center">
 						<input id="booking_date_reload" type="date" class="form-control" value="{{ booking_date }}"/>
 					</div>
@@ -76,7 +78,8 @@ Bookings Management
                             {{booking_time.start_time}}
                           {% endif %}>                          
                         {% if booking_time.flag == 'booked' and table.table_number in booking_time.table %}                           
-                          {% for book_phone in booking_time.booking_phone %}
+                          <h6>Booking:</h6>
+						  {% for book_phone in booking_time.booking_phone %}
                             {% with parts=book_phone|split:"-"  %}                              
                               {% if parts.0 == table.table_number %}                                                          
                                 <small id="myInput">{{parts.1}}</small>
@@ -100,7 +103,12 @@ Bookings Management
                 </table>
                 </div>
             </div>
-            <!-- Simple Datatable End -->
+            <!-- Bookings -->
+
+			<!-- Orders -->			
+			<!-- Orders -->
+			
+			
         </div>
         {% include '../includes/admin/footer.html' %}
     </div>

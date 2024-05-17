@@ -18,6 +18,7 @@ urlpatterns = [
 
     # Logged-in Auth
     path('admin/', RedirectView.as_view(url='/accounts/login'), name='manage'),
+    path('accounts/', RedirectView.as_view(url='/accounts/login'), name='manage'),
     path('accounts/login/', views.admin_login, name='login'),
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
     

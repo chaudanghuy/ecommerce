@@ -35,7 +35,7 @@ def book_table(request):
         # Get all bookings for the given date
         bookings = Booking.objects.filter(
             booking_date=booking_date
-        )
+        ).exclude(customer__address__icontains='pickup-order')
         
         bookings_in_slot = []
         for booking in bookings:
@@ -140,7 +140,7 @@ def check_available_time_slots(request):
     # Get all bookings for the given date
     bookings = Booking.objects.filter(
         booking_date=booking_date.date()
-    )
+    ).exclude(customer__address__icontains='pickup-order')
 
     # Create a list of all booked time slots
     booked_time_slots = []
@@ -219,7 +219,7 @@ def edit_food(request):
 
 @require_GET
 def get_calendar_events(request):
-    bookings = Booking.objects.all().exclude(customer__address__icontains='pickup-order') 
+    bookings = Booking.objects.filter(customer__address__icontains='pickup-order') 
     events = [{
         'start': f"{booking.booking_date} {booking.booking_time}",
         'end': (dt.strptime(f"{booking.booking_date} {booking.booking_time}", "%Y-%m-%d %H:%M") + timedelta(minutes=booking.duration)).strftime('%Y-%m-%d %H:%M'),
