@@ -24,6 +24,7 @@ TOTAL_TABLE = os.getenv("TOTAL_TABLE")
 RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
 RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
 CALENDAR_ID = os.getenv("CALENDAR_ID")
+CALENDAR_ORDER_ID = os.getenv("CALENDAR_ORDER_ID")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -106,6 +107,16 @@ else:
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
+
+            # 'ENGINE': 'django.db.backends.mysql',
+            # 'OPTIONS': {
+            #     'init_command': 'SET default_storage_engine=INNODB',
+            # },
+            # 'NAME': 'vietan',
+            # 'USER': 'root',
+            # 'PASSWORD': '',
+            # 'HOST': 'localhost',
+            # 'PORT': '3306',
         },
     }
 
