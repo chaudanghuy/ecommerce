@@ -39,7 +39,7 @@ SECRET_KEY = "django-insecure-j=z_w$hs&p(^bfp6rzkxp7e@52akejq72d37@d1h1_crb+av-j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("ENV") == "Local" 
 
-ALLOWED_HOSTS = ["51.195.101.225", "127.0.0.1", "viet-an.co.uk", "vietan.phapsuit.com","localhost"]
+ALLOWED_HOSTS = ["51.195.101.225", "127.0.0.1", "viet-an.co.uk", "vietan.phapsuit.com","localhost", "http://localhost:8000"]
 
 
 # Application definition
@@ -53,11 +53,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_recaptcha",
     "apps.restaurant",    
+    "corsheaders"
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -102,21 +104,22 @@ if DATABASE_TYPE == "postgres":
             "PORT": "",
         }
     }
+elif DATABASE_TYPE == "mysql":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": "vietan",
+            "USER": "root",
+            "PASSWORD": "",
+            "HOST": "localhost",
+            "PORT": "3306",
+        }
+    }
 else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-
-            # 'ENGINE': 'django.db.backends.mysql',
-            # 'OPTIONS': {
-            #     'init_command': 'SET default_storage_engine=INNODB',
-            # },
-            # 'NAME': 'vietan',
-            # 'USER': 'root',
-            # 'PASSWORD': '',
-            # 'HOST': 'localhost',
-            # 'PORT': '3306',
+            "NAME": BASE_DIR / "db.sqlite3",            
         },
     }
 
@@ -173,3 +176,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Session
 CART_SESSION_ID = 'cart'
+
+# CORS
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000'
+]
