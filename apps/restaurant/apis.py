@@ -20,7 +20,7 @@ def book_table(request):
         booking_time = data.get('booking_time')
         total_customer = int(data.get('total_customer'))
         special_request = data.get('special_requests')
-        duration = 90 if total_customer <= 3 else (120 if total_customer <= 6 else 150)
+        duration = 90 if total_customer <= 4 else (105 if total_customer <= 6 else 120)
         tables_required = total_customer // 7 + (1 if total_customer % 7 != 0 else 0)
         
         try:

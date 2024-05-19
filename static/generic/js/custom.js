@@ -174,6 +174,11 @@ $('#booking-btn').on('click', function(e) {
         $('.error-message').hide();
     }
 
+    if (total_customer > 10) {
+        $('#noticeModal').modal('show');
+        return;
+    }
+
     var special_requests = $('textarea[name=special_requests]').val().trim();
     if (special_requests === '') {
         special_requests = "None";
