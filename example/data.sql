@@ -313,8 +313,8 @@ CREATE TABLE `restaurant_bookingdetail` (
   `food_sub_quantity` varchar(0) DEFAULT NULL,
   `food_sub_price` varchar(0) DEFAULT NULL,
   `deleted_at` varchar(0) DEFAULT NULL,
-  `booking_id` varchar(32) DEFAULT NULL,
-  `food_id` varchar(32) DEFAULT NULL,
+  `booking_id` varchar(36) DEFAULT NULL,
+  `food_id` varchar(36) DEFAULT NULL,
   `food_sub_id` varchar(36) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;

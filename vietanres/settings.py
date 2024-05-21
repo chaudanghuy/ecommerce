@@ -102,23 +102,37 @@ if DATABASE_TYPE == "postgres":
             "PORT": "",
         }
     }
+elif DATABASE_TYPE == "mysql":
+    DATABASES = {
+        "default": {
+            'ENGINE': 'django.db.backends.mysql',
+            'OPTIONS': {
+                'init_command': 'SET default_storage_engine=INNODB',
+            },
+            'NAME': 'vietan',
+            'USER': 'root',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '3306',
+        }
+    }
 else:
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-
-            # 'ENGINE': 'django.db.backends.mysql',
-            # 'OPTIONS': {
-            #     'init_command': 'SET default_storage_engine=INNODB',
-            # },
-            # 'NAME': 'vietan',
-            # 'USER': 'root',
-            # 'PASSWORD': '',
-            # 'HOST': 'localhost',
-            # 'PORT': '3306',
+            # "ENGINE": "django.db.backends.sqlite3",
+            # "NAME": BASE_DIR / "db.sqlite3",            
+            'ENGINE': 'django.db.backends.mysql',
+            'OPTIONS': {
+                'init_command': 'SET default_storage_engine=INNODB',
+            },
+            'NAME': 'vietan',
+            'USER': 'djangouser',
+            'PASSWORD': 'yourpassword',
+            'HOST': 'localhost',
+            'PORT': '3306',
         },
     }
+
 
 
 # Password validation
@@ -149,7 +163,7 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

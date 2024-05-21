@@ -19,6 +19,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import FoodForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import F, Value as V
+from django.db.models.functions import Concat, Substr, StrIndex
 
 # Frontend
 def index(request):
@@ -26,13 +28,29 @@ def index(request):
 
 def customer_index(request):
     restaurant = Restaurant.objects.all()[0]
-    foods = Food.objects.filter(availability='available')  # Filter for availability only
+    foods = Food.objects.annotate(
+        first_space = StrIndex('name', V(' '))
+    ).annotate(
+        first_word = Substr(
+            'name',
+            1,
+            F('first_space') - 1,
+        )
+    ).filter(availability='available').order_by('first_word')  # Filter for availability only
     categories = Category.objects.all()
     return render(request, 'themes/'+settings.THEME+'/index.html', {'foods': foods, 'restaurant': restaurant, 'categories': categories})
 
 def customer_book(request):
     restaurant = Restaurant.objects.all()[0]
-    foods = Food.objects.all()
+    foods = Food.objects.annotate(
+        first_space = StrIndex('name', V(' '))
+    ).annotate(
+        first_word = Substr(
+            'name',
+            1,
+            F('first_space') - 1,
+        )
+    ).filter(availability='available').order_by('first_word')
     captcha_key = settings.RECAPTCHA_PUBLIC_KEY
     return render(request, 'themes/'+settings.THEME+'/book.html', {'foods': foods, 'restaurant': restaurant, 'captcha_key': captcha_key})
 
@@ -41,12 +59,28 @@ def customer_gallery(request):
 
 def customer_order(request):
     restaurant = Restaurant.objects.all()[0]
-    foods = Food.objects.filter(availability='available')  # Filter for availability only
+    foods = Food.objects.annotate(
+        first_space = StrIndex('name', V(' '))
+    ).annotate(
+        first_word = Substr(
+            'name',
+            1,
+            F('first_space') - 1,
+        )
+    ).filter(availability='available').order_by('first_word')
     return render(request, 'themes/'+settings.THEME+'/order.html', {'foods': foods, 'restaurant': restaurant})
 
 def customer_order_book(request):
     restaurant = Restaurant.objects.all()[0]
-    foods = Food.objects.filter(availability='available')  # Filter for availability only
+    foods = Food.objects.annotate(
+        first_space = StrIndex('name', V(' '))
+    ).annotate(
+        first_word = Substr(
+            'name',
+            1,
+            F('first_space') - 1,
+        )
+    ).filter(availability='available').order_by('first_word')
     return render(request, 'themes/'+settings.THEME+'/order_book.html', {'foods': foods, 'restaurant': restaurant})
 
 def customer_order_confirm(request):

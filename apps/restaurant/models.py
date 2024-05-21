@@ -5,7 +5,7 @@ import uuid
 
 # Create your models here.
 class Translation(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(max_length=36,primary_key=True, default=uuid.uuid4, editable=False)
     language = models.CharField(max_length=10)
     code = models.CharField(max_length=10)    
     description = models.TextField()      
@@ -14,7 +14,7 @@ class Translation(models.Model):
         return self.language
     
 class Restaurant(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)    
+    id = models.CharField(max_length=36,primary_key=True, default=uuid.uuid4, editable=False)    
     name = models.CharField(max_length=100)
     address = models.TextField()
     phone = models.CharField(max_length=20)
@@ -26,7 +26,7 @@ class Restaurant(models.Model):
         return self.name
     
 class User(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(max_length=36,primary_key=True, default=uuid.uuid4, editable=False)
     fullname = models.CharField(max_length=100, default='')
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
@@ -36,7 +36,7 @@ class User(models.Model):
         return self.username
 
 class Customer(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(max_length=36,primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.TextField()
     phone = models.CharField(max_length=20)
@@ -45,14 +45,14 @@ class Customer(models.Model):
         return self.user_id
     
 class MyTable(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(max_length=36,primary_key=True, default=uuid.uuid4, editable=False)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     table_number = models.CharField(max_length=10)
     capacity = models.IntegerField()
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.AVAILABLE)    
     
 class Booking(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(max_length=36,primary_key=True, default=uuid.uuid4, editable=False)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     table = models.ForeignKey(MyTable, on_delete=models.CASCADE)
     booking_code = models.CharField(max_length=100,  default=uuid.uuid4)
@@ -70,7 +70,7 @@ class Booking(models.Model):
         return self.booking_code
 
 class Menu(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(max_length=36,primary_key=True, default=uuid.uuid4, editable=False)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -79,7 +79,7 @@ class Menu(models.Model):
         return self.name
 
 class Category(models.Model):
-    id =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id =  models.CharField(max_length=36,primary_key=True, default=uuid.uuid4, editable=False)
     translation = models.ForeignKey(Translation, on_delete=models.CASCADE)
     filter_code = models.CharField(max_length=55, default='')
     menu_id = models.ForeignKey(Menu, on_delete=models.CASCADE)
@@ -89,7 +89,7 @@ class Category(models.Model):
         return self.name
     
 class CategorySub(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(max_length=36,primary_key=True, default=uuid.uuid4, editable=False)
     translation = models.ForeignKey(Translation, on_delete=models.CASCADE)
     category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)    
@@ -98,7 +98,7 @@ class CategorySub(models.Model):
         return self.name    
     
 class Food(models.Model): 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(max_length=36,primary_key=True, default=uuid.uuid4, editable=False)
     translation_id = models.ForeignKey(Translation, on_delete=models.CASCADE, db_column='translation_id')  
     category = models.ForeignKey(Category, default=1, on_delete=models.CASCADE)  
     category_sub = models.ForeignKey(CategorySub, on_delete=models.CASCADE, blank=True, null=True)   
@@ -112,7 +112,7 @@ class Food(models.Model):
         return self.name
 
 class FoodSub(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(max_length=36,primary_key=True, default=uuid.uuid4, editable=False)
     translation = models.ForeignKey(Translation, on_delete=models.CASCADE)
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -124,7 +124,7 @@ class FoodSub(models.Model):
         return self.name
     
 class BookingDetail(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.CharField(max_length=36,primary_key=True, default=uuid.uuid4, editable=False)
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
     quantity = models.IntegerField()
