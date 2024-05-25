@@ -202,8 +202,14 @@ cd ecommerce
     ```bash
     docker-compose up --build
     ```
+2. **Run Django migrations and create superuser**
 
-2. **Access the application:**
+    ```bash
+    docker-compose run backend python manage.py migrate
+
+    docker-compose run backend python manage.py createsuperuser
+    ```
+3. **Access the application:**
 
     - Django backend: [http://localhost:8000](http://localhost:8000)
     - Next.js frontend: [http://localhost:3000](http://localhost:3000)
