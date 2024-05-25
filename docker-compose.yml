@@ -5,7 +5,7 @@ services:
     build:
       context: ./backend
     container_name: backend
-    command: /bin/bash -c "python manage.py runserver 0.0.0.0:8000 & /app/backend/scripts/watchdog.sh"
+    command: /bin/bash -c "python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./backend:/app/backend
     ports:
