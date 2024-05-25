@@ -1,42 +1,53 @@
-version: '3.9'
+version: '3.8'
 
 services:
-  db:
-    container_name: psi_db
-    image: postgres:14-alpine
-    ports:
-      - '5432:5432'
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
-  
-  frontend:
-    container_name: psi_fe
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app/frontend
-    depends_on:
-      - backend
-
   backend:
-    container_name: psi_be
-    build: 
+    build:
       context: ./backend
-      dockerfile: Dockerfile
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
-    ports:
-      - "8000:8000"
+    container_name: backend
+    command: /bin/bash -c "python manage.py runserver 0.0.0.0:8000 & /app/backend/scripts/watchdog.sh"
     volumes:
       - ./backend:/app/backend
+    ports:
+      - "8000:8000"
     depends_on:
       - db
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    volumes:
+      - ./frontend:/app/frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=development
+
+  db:
+    image: postgres:13
+    container_name: db
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
